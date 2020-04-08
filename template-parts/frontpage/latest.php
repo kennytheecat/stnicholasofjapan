@@ -33,11 +33,12 @@ if ( $results ) {
 }
 
 // Is there a recent weekly bulletin
-$results = $wpdb->get_results( "SELECT * FROM bulletins WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW() ORDER BY date DESC");
+$results = $wpdb->get_results( "SELECT * FROM bulletins WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 3 DAY) AND DATE_ADD(NOW(), INTERVAL 2 DAY) ORDER BY date DESC");
 
 foreach ($results as $result) {
     $result->post_date = $result->date;
-    $result->post_title = $result->date;
+    $bulletin_naming = get_option( 'bulletin_naming');
+    $result->post_title = date( $bulletin_naming, strtotime($result->date ) );
     $result->post_type = 'bulletin';
     $items[] = $result;
 }
