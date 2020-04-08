@@ -33,7 +33,7 @@ $items = array_slice( $items, 0, 4 );
         switch ($post->post_type) {
             case 'sermons':
                 $type = 'Sermon';
-                break;
+                break; 
 
                 case 'documents':
                     $type = 'Document';
@@ -44,7 +44,7 @@ $items = array_slice( $items, 0, 4 );
                     break;
 
                 case 'galleries':
-                    $type = 'Gallery';
+                    $type = 'Gallery'; 
                     break;
 
                 case 'bulletin':

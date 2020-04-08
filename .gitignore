@@ -7,6 +7,15 @@ node_modules/
 _dev/
 /_dev/
 
+.editorconfig
+.eslintignore
+.eslintrc.js
+gulpfile.babel.js
+package-lock.json
+package.json
+phpcs.xml.dist
+wpgulp.config.js
+
 # Packages #
 ############
 *.7z
