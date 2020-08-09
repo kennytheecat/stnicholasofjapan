@@ -9,6 +9,8 @@ foreach ( $media_array as $posttype ) {
         ),
     );
     $hasposts = get_posts( $args );
+
+    $media_array_checked = array();
     if ( $hasposts ) {
         $media_array_checked[] = $posttype;
     }
@@ -42,43 +44,48 @@ $terms = get_terms( array(
     'hide_empty' => 0,
     'taxonomy' => 'bulletin_types',
 ) );
-foreach ( $terms as $term ) {
-    
-    $args = array( 
-        'posts_per_page'    => 1, 
-        'post_status'            => array( 'publish' ),
-        'post_type'         => 'bulletins',
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'bulletin_types',
-                'field' => 'id',
-                'terms' => $term->term_id,
+
+if ( $terms ) {
+    foreach ( $terms as $term ) {
+        
+        $args = array( 
+            'posts_per_page'    => 1, 
+            'post_status'            => array( 'publish' ),
+            'post_type'         => 'bulletins',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'bulletin_types',
+                    'field' => 'id',
+                    'terms' => $term->term_id,
+                ),
+            ),   
+            'meta_query' => array(
+                array(
+                    'key' => '_bulletin_date',
+                    'value' => date('c', strtotime( '-4 months' )),
+                    'type' => 'numeric',
+                    'compare' => '<='
+                )
             ),
-        ),   
-        'meta_query' => array(
-            array(
-                'key' => '_bulletin_date',
-                'value' => date('c', strtotime( '-4 months' )),
-                'type' => 'numeric',
-                'compare' => '<='
-            )
-        ),
-        'orderby' => 'meta_value',
-        'meta_key' => '_bulletin_date',     
-    );
-    $bulletins = get_posts( $args );
+            'orderby' => 'meta_value',
+            'meta_key' => '_bulletin_date',     
+        );
+        $bulletins = get_posts( $args );
 
-    if ( $bulletins ) {
+        if ( $bulletins ) {
 
 
-        foreach ( $bulletins as $bulletin ) {
-            $items[] = $bulletin;
+            foreach ( $bulletins as $bulletin ) {
+                $items[] = $bulletin;
+            }
         }
     }
 }
 // Sort the array by most recent post date
 $date = array_column($items, 'post_date');
-array_multisort($date, SORT_DESC, $items );
+if ( $date ) }{
+    array_multisort($date, SORT_DESC, $items );
+}
 
 // make sure there is only 4 items
 $items = array_slice( $items, 0, $ppp );
