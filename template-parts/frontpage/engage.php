@@ -3,7 +3,8 @@
         <div class="seraph"></div>
 
     <?php
-    $intro = get_option('frontpage', true);
+    $intro = get_option('frontpage', false);
+    if ( $intro ) {
 
     $intro['prayer_button_url'] = isset( $intro['prayer_button_url']  ) ? get_the_permalink($intro['prayer_button_url'] ) : '';
     
@@ -30,6 +31,7 @@
         <button><a href="<?php echo $intro['ask_button_url']; ?>"><?php echo $intro['ask_button']; ?></a></button>
     </div>
 
+<?php } ?>
     </div>
 
 </section>

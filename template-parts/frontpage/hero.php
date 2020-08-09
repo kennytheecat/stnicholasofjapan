@@ -1,5 +1,9 @@
+<section class="hero-section">
+
 <?php 
-$intro = get_option('frontpage', true); 
+$intro = get_option('frontpage', false); 
+if ( $intro) {
+
 $intro['hero_image'] = isset($intro['hero_image']) ? $intro['hero_image'] : '';
 
 if ( is_numeric( $intro['hero_button_1_url'] ) ) {
@@ -15,7 +19,7 @@ if ( isset( $intro['hero_button_2_url_override'] ) ) {
     $intro['hero_button_2_url'] = $intro['hero_button_2_url_override'];
 }
 ?>
-<section class="hero-section">
+
     <img src="<?php echo $intro['hero_image']?>" class="hero-image" />
 
     <div class="hero-content">
@@ -25,4 +29,5 @@ if ( isset( $intro['hero_button_2_url_override'] ) ) {
             <button class="learn"><a href="<?php echo $intro['hero_button_2_url']; ?>"><?php echo $intro['hero_button_2_text']; ?></a></button>
         </div>			
     </div>
+<?php } ?>
 </section>

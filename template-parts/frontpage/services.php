@@ -2,7 +2,8 @@
     <div class="wrapper">
 
         <?php 
-        $intro = get_option('frontpage', true); 
+        $intro = get_option('frontpage', false);
+        if ( $intro ) {
         if ( isset($intro['map_address_override']) ) {
             $location_full_map = str_replace( ' ', '%20', $intro['map_address_override'] );
         } else {
@@ -24,7 +25,7 @@
         <div class="service_map">
 			<iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q='<?php echo $location_full_map; ?>'&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
 		</div>
-
+            <?php } ?>
     </div>
 </section>
 
