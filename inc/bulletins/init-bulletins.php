@@ -1,4 +1,5 @@
 <?php
-include('bulletins-metaboxes.php');
+include('bulletins-cpt.php');
 include('bulletins-functions.php');
+include('bulletins-metaboxes.php');
 ?>

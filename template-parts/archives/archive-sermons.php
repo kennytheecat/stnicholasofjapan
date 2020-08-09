@@ -17,7 +17,7 @@ $location = $location[0]->name;
 
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'archive_entry_sermon' ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( array('archive_entry', 'archive_entry_sermon' ) ); ?>>
 	<header class="entry-header">
         <div class="date-wrapper">
             <div class="date">

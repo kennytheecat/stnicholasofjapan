@@ -16,6 +16,15 @@
 
 	<?php //tabula_rasa_tabularasa_post_thumbnail(); ?>
 
+	<?php
+	wp_nav_menu( array( 
+		'theme_location' => 'infohub', 
+		'menu_class' => 'submenu', 
+		'sub_menu' => true,
+		) 
+	) ; 
+	?>
+
 	<div class="block">
 		<div class="wrapper"></div>
 	</div>

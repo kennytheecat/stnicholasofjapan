@@ -1,10 +1,17 @@
 <?php 
 $intro = get_option('frontpage', true); 
+
 if ( is_numeric( $intro['hero_button_1_url'] ) ) {
     $intro['hero_button_1_url'] = get_the_permalink($intro['hero_button_1_url'] );
 }
+if ( $intro['hero_button_1_url_override'] ) {
+    $intro['hero_button_1_url'] = $intro['hero_button_1_url_override'];
+}
 if ( is_numeric( $intro['hero_button_2_url'] ) ) {
     $intro['hero_button_2_url'] = get_the_permalink($intro['hero_button_2_url'] );
+}
+if ( $intro['hero_button_2_url_override'] ) {
+    $intro['hero_button_2_url'] = $intro['hero_button_2_url_override'];
 }
 ?>
 <section class="hero-section">

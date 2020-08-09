@@ -84,4 +84,11 @@ function my_wp_nav_menu_objects_sub_menu( $sorted_menu_items, $args ) {
     return $sorted_menu_items;
   }
 }
+
+
+//** Social Media Array
+///////////////////////////////////////////////////////
+function get_sm_array() {
+  return $sm_array = array( 'Facebook' => 'facebook', 'Instagram' => 'instagram',  'YouTube' => 'youtube', 'LinkedIn' => 'linkedin', 'Flickr' => 'flickr', 'SnapChat' => 'snapchat');
+}
 ?>

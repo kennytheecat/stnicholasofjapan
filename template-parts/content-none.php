@@ -46,6 +46,10 @@
 			get_search_form();
 
 		endif;
+
+		get_template_part('template-parts/frontpage/videos'); 
+					
+		get_template_part('template-parts/frontpage/latest'); 
 		?>
 	</div><!-- .page-content -->
 </section><!-- .no-results -->

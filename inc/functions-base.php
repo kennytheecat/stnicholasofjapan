@@ -244,7 +244,8 @@ function tr_theme_support() {
 		array(
 			'social' => __( 'Social Menu', 'tabula-rasa'),
 			'sec-nav' => __( 'The Secondary Menu', 'tabula-rasa' ),   // secondary nav in header
-			'footer-links' => __( 'Footer Links', 'tabula-rasa' ) // secondary nav in footer
+			'footer-links' => __( 'Footer Links', 'tabula-rasa' ), // secondary nav in footer
+			'infohub' => __( 'Info Hub', 'tabula-rasa' )
 		)
 	);
 	

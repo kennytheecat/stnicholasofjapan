@@ -33,25 +33,59 @@ function custom_post_type_galleries() {
 		'label'                 => __( 'Gallery', 'prescottorthodox' ),
 		'description'           => __( 'Post Type Description', 'prescottorthodox' ),
 		'labels'                => $labels,
-		'supports'              => array( 'title', 'author', 'thumbnail', 'editor' ),
+		'supports'              => array( 'title', 'author', 'thumbnail'  ),
 		//'taxonomies'            => array( 'services' ),
 		'hierarchical'          => false,
 		'public'                => true,
 		'show_ui'               => true,
 		'show_in_menu'          => true,
 		'menu_position'         => 5,
-		'menu_icon'             => 'dashicons-controls-volumeon',
+		'menu_icon'             => 'dashicons-images-alt2',
 		'show_in_admin_bar'     => true,
 		'show_in_nav_menus'     => true,
 		'can_export'            => true,
 		'has_archive'           => true,		
 		'exclude_from_search'   => false,
 		'publicly_queryable'    => true,
-		'capability_type'       => 'post',
+        'capability_type'    => array ( 'gallery', 'galleries' ),
+        'map_meta_cap'       => true,
 		'show_in_rest' => true,
 	);
 	register_post_type( 'galleries', $args );
 
 }
 add_action( 'init', 'custom_post_type_galleries', 0 );
+
+
+function create_gallery_roles () {
+	$cap = array(
+		'delete_galleries' => true,
+		'delete_published_galleries' => true,
+		'edit_galleries' => true,
+		'edit_published_galleries' => true,
+		'publish_galleries' => true,
+	);
+
+	add_role( 'gallery_author', 'Gallery Author', $cap );
+
+	// add the custom capabilities to the desired user roles 
+$roles = array( 'editor','administrator' );
+
+foreach( $roles as $the_role ) {      
+    
+    $role = get_role($the_role);
+            
+            $role->add_cap( 'read_private_galleries' );
+            $role->add_cap( 'edit_galleries' );
+			$role->add_cap( 'edit_others_galleries' );
+			$role->add_cap( 'edit_private_galleries' );
+            $role->add_cap( 'edit_published_galleries' );
+			$role->add_cap( 'publish_galleries' );
+			$role->add_cap( 'delete_galleries' );
+            $role->add_cap( 'delete_others_galleries' );
+            $role->add_cap( 'delete_private_galleries' );
+            $role->add_cap( 'delete_published_galleries' );
+}
+}
+add_action('after_switch_theme', 'create_gallery_roles');
 ?>

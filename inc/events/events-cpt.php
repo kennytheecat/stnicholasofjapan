@@ -40,15 +40,16 @@ function custom_post_type_events() {
 		'show_ui'               => true,
 		'show_in_menu'          => true,
 		'menu_position'         => 5,
-		'menu_icon'             => 'dashicons-controls-volumeon',
+		'menu_icon'             => 'dashicons-calendar-alt',
 		'show_in_admin_bar'     => true,
 		'show_in_nav_menus'     => true,
 		'can_export'            => true,
 		'has_archive'           => true,		
 		'exclude_from_search'   => false,
 		'publicly_queryable'    => true,
-		'capability_type'       => 'post',
-		'show_in_rest' => true,
+        'capability_type'    => 'event',
+        'map_meta_cap'       => true,
+		'show_in_rest' => true, 
 	);
 	register_post_type( 'events', $args );
 
@@ -88,11 +89,71 @@ function custom_taxonomy_location_types() {
 		'show_admin_column'          => true,
 		'show_in_nav_menus'          => true,
 		'show_tagcloud'              => true,
+		'capabilities' => array(
+			'manage_terms' => 'manage_locations',
+			'edit_terms' => 'edit_locations',
+			'delete_terms' => 'delete_locations',
+			'assign_terms' => 'assign_locations',
+		),
 	);
 	register_taxonomy( 'locations', array( 'events' ), $args );
 
 }
 add_action( 'init', 'custom_taxonomy_location_types', 0 );
+
+
+function create_event_roles () {
+	$cap = array(
+		'delete_events' => true,
+		'delete_published_events' => true,
+		'edit_events' => true,
+		'edit_published_events' => true,
+		'publish_events' => true,
+
+		//taxonomomy
+		'manage_locations'	=> true,
+		'edit_locations'	=> true,
+		'delete_locations'	=> true,
+		'assign_locations'	=> true,
+	);
+
+	add_role( 'event_author', 'Event Author', $cap );
+
+	/*
+	$role = get_role('event_author');
+				
+	$role->add_cap( 'manage_locations' );
+	$role->add_cap( 'edit_locations' );
+	$role->add_cap( 'delete_locations' );
+	$role->add_cap( 'assign_locations' );
+	*/
+
+	// add the custom capabilities to the desired user roles 
+$roles = array( 'editor','administrator' );
+
+foreach( $roles as $the_role ) {      
+    
+    $role = get_role($the_role);
+            
+            $role->add_cap( 'read_private_events' );
+            $role->add_cap( 'edit_events' );
+			$role->add_cap( 'edit_others_events' );
+			$role->add_cap( 'edit_private_events' );
+            $role->add_cap( 'edit_published_events' );
+			$role->add_cap( 'publish_events' );
+			$role->add_cap( 'delete_events' );
+            $role->add_cap( 'delete_others_events' );
+            $role->add_cap( 'delete_private_events' );
+			$role->add_cap( 'delete_published_events' );
+			
+			//taxonomy
+			$role->add_cap( 'manage_locations' );
+			$role->add_cap( 'edit_locations' );
+			$role->add_cap( 'delete_locations' );
+			$role->add_cap( 'assign_locations' );			
+}
+}
+add_action('after_switch_theme', 'create_event_roles');
 
 $location_meta = array( 'address', 'city', 'state');
 

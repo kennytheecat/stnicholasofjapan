@@ -23,14 +23,6 @@ $the_query = new WP_Query( $args );
 
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main">
-			
-		<?php
-		wp_nav_menu( array(
-			'menu'     => 'Main Nav',
-			'sub_menu' => true,
-			'container_class' => 'submenu'
-			) );
-		?>
 
 		<header class="entry-header">
 			<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
@@ -43,7 +35,13 @@ $the_query = new WP_Query( $args );
 				post_type_archive_title( '<h1 class="page-title">', '</h1>' );
 				?>
 			</header><!-- .page-header -->
-
+			<?php
+			wp_nav_menu( array(
+				'menu'     => 'Main Nav',
+				'sub_menu' => true,
+				'container_class' => 'submenu'
+				) );
+			?>
 			<div class="block">
 				<div class="wrapper"></div>
 			</div>

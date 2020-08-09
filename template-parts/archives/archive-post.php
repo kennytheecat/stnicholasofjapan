@@ -8,7 +8,7 @@
  */
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'archive_entry_article' ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( array('archive_entry', 'archive_entry_article' )); ?>>
 	<header class="entry-header">
     <?php 
     echo '<div class="image">';

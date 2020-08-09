@@ -35,28 +35,28 @@ function register_settings_metabox() {
     $cmb->add_field( array(
         'name' => __( 'Church Street Address', 'bothand' ),
         'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_adress_street',
+        'id'   => 'basic_info_address_street',
         'type' => 'text',
     ) );  
     
     $cmb->add_field( array(
         'name' => __( 'Church City', 'bothand' ),
         'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_adress_city',
+        'id'   => 'basic_info_address_city',
         'type' => 'text',
     ) );      
     
     $cmb->add_field( array(
         'name' => __( 'Church State', 'bothand' ),
         'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_adress_state',
+        'id'   => 'basic_info_address_state',
         'type' => 'text',
     ) );  
 
     $cmb->add_field( array(
         'name' => __( 'Church Zip Code', 'bothand' ),
         'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_adress_zip',
+        'id'   => 'basic_info_address_zip',
         'type' => 'text',
     ) ); 
 
@@ -75,29 +75,105 @@ function register_settings_metabox() {
     ) );    
 
     $cmb->add_field( array(
-        'name' => __( 'Facebook Page', 'bothand' ),
-        'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_facebook',
-        'type' => 'text_url',
+        'name' => __( 'Sidebar Section', 'bothand' ),
+        'desc' => __( 'Buttons', 'bothand' ),
+        'id'   => 'sidebar',
+        'type' => 'title',
+    ) );   
+
+    $group_field_id = $cmb->add_field( array(
+		'id'          => 'sidebar_buttons',
+		'type'        => 'group',
+		'description' => esc_html__( 'Generates reusable form entries', 'cmb2' ),
+		'options'     => array(
+			'group_title'    => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
+			'add_button'     => esc_html__( 'Add Another Entry', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Entry', 'cmb2' ),
+			'sortable'       => true,
+			// 'closed'      => true, // true to have the groups closed by default
+			// 'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
+		),
+	) );  
+
+
+    $cmb->add_group_field( $group_field_id, array(
+		'name'       => esc_html__( 'Entry Title', 'cmb2' ),
+		'id'         => 'title',
+		'type'       => 'text'
     ) );    
+    
+    $cmb->add_group_field( $group_field_id, array(
+        'name' => __( 'Button #1 Link ', 'bothand' ),
+        'desc' => __( '', 'bothand' ),
+        'id'   => 'url',
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options',      
+    ) );
 
+    $cmb->add_group_field( $group_field_id, array(
+		'name' => esc_html__( 'Button #1 Link(Custom URL)', 'cmb2' ),
+		'desc' => esc_html__( 'If filled in, will override the above link', 'cmb2' ),
+		'id'   => 'url_override',
+		'type' => 'text_url',   
+    ) );
     
     $cmb->add_field( array(
-        'name' => __( 'Instagram', 'bothand' ),
-        'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_instagram',
-        'type' => 'text_url',
+        'name' => __( 'Sidebar Image', 'bothand' ),
+        'desc' => __( 'Long vertical images work best', 'bothand' ),
+        'id'   => 'sidebar_image',
+        'type' => 'file',
+        // Optional:
+        'options' => array(
+          'url' => false, // Hide the text input for the url
+        ),
+        'text'    => array(
+          'add_upload_file_text' => 'Add Image' // Change upload button text. Default: "Add or Upload File"
+        ),
+        // query_args are passed to wp.media's library query.
+        'query_args' => array(
+          //'type' => 'application/pdf', // Make library only display PDFs.
+          // Or only allow gif, jpg, or png images
+           'type' => array(
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+           ),
+        ),
+        'preview_size' => 'medium', // Image size to use when previewing in the admin.
     ) );  
 
-    
     $cmb->add_field( array(
-        'name' => __( 'Youtube', 'bothand' ),
-        'desc' => __( '', 'bothand' ),
-        'id'   => 'basic_info_youtube',
-        'type' => 'text_url',
-    ) );  
+        'name' => __( 'Footer Section', 'bothand' ),
+        'desc' => __( 'Service Times', 'bothand' ),
+        'id'   => 'footer',
+        'type' => 'title',
+    ) );   
 
+    for ( $i=1; $i <= 4; $i++ ) {
+
+        $cmb->add_field( array(
+            'name' => __( 'Line #' . $i, 'bothand' ),
+            'desc' => __( '', 'bothand' ),
+            'id'   => 'footer_line_' . $i,
+            'type' => 'text',
+        ) );    
+
+    }
+
+    $sm_array = $sm_array = get_sm_array();
+
+    foreach ( $sm_array as $key => $value ) {
+
+        $cmb->add_field( array(
+            'name' => __( $key . ' Page', 'bothand' ),
+            'desc' => __( '', 'bothand' ),
+            'id'   => 'basic_info_' . $value,
+            'type' => 'text_url',
+        ) );    
     
+    } 
+
     $cmb->add_field( array(
         'name' => esc_html__( 'Default Images Section', 'cmb2' ),
         'desc' => esc_html__( 'Every post type has a default image in case a featured image is not uploaded', 'cmb2' ),
@@ -142,20 +218,79 @@ function register_settings_metabox() {
 
     }
 
-
     $cmb->add_field( array(
-        'name' => __( 'Video #1 for 404 pages', 'bothand' ),
-        'desc' => __( 'Upload video link', 'bothand' ),
-        'id'   => 'video-404-1',
-        'type' => 'oembed',
+        'name' => __( 'Conact Page Buttons', 'bothand' ),
+        'desc' => __( 'Buttons', 'bothand' ),
+        'id'   => 'contact',
+        'type' => 'title',
+    ) );   
+
+    $group_field_id = $cmb->add_field( array(
+		'id'          => 'contact_buttons',
+		'type'        => 'group',
+		'description' => esc_html__( 'Generates reusable form entries', 'cmb2' ),
+		'options'     => array(
+			'group_title'    => esc_html__( 'Entry {#}', 'cmb2' ), // {#} gets replaced by row number
+			'add_button'     => esc_html__( 'Add Another Entry', 'cmb2' ),
+			'remove_button'  => esc_html__( 'Remove Entry', 'cmb2' ),
+			'sortable'       => true,
+			// 'closed'      => true, // true to have the groups closed by default
+			// 'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
+		),
+	) );  
+
+    $cmb->add_group_field( $group_field_id, array(
+		'name'       => esc_html__( 'Button Description', 'cmb2' ),
+		'id'         => 'desc',
+		'type'       => 'text'
+    ) );   
+
+    $cmb->add_group_field( $group_field_id, array(
+		'name'       => esc_html__( 'Button Title', 'cmb2' ),
+		'id'         => 'title',
+		'type'       => 'text'
     ) );    
     
-    $cmb->add_field( array(
-        'name' => __( 'Video #2 for 404 pages', 'bothand' ),
-        'desc' => __( 'Upload video link', 'bothand' ),
-        'id'   => 'video-404-2',
-        'type' => 'oembed',
+    $cmb->add_group_field( $group_field_id, array(
+        'name' => __( 'Button #1 Link ', 'bothand' ),
+        'desc' => __( '', 'bothand' ),
+        'id'   => 'url',
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options',      
+    ) );
+
+    $cmb->add_group_field( $group_field_id, array(
+		'name' => esc_html__( 'Button #1 Link(Custom URL)', 'cmb2' ),
+		'desc' => esc_html__( 'If filled in, will override the above link', 'cmb2' ),
+		'id'   => 'url_override',
+		'type' => 'text_url',   
     ) );    
+
+    $cmb->add_field( array(
+        'name' => __( '404 Page Videos', 'bothand' ),
+        'desc' => __( 'The 404 page dynaimcally pulls form the fist two videos on the home page. If you would like to override those videos, fill out the section below.', 'bothand' ),
+        'id'   => '404-videos',
+        'type' => 'title',
+    ) );
+
+    for ( $i=1; $i <= 2; $i++ ) {
+
+        $cmb->add_field( array(
+            'name' => __( 'Video #' . $i . ' Title for 404 pages', 'bothand' ),
+            'desc' => __( 'Video Title', 'bothand' ),
+            'id'   => 'video-404-' . $i . '-override-title',
+            'type' => 'text',
+        ) );           
+
+        $cmb->add_field( array(
+            'name' => __( 'Video #' . $i . ' for 404 pages', 'bothand' ),
+            'desc' => __( 'Upload video link', 'bothand' ),
+            'id'   => 'video-404-' . $i . '-override',
+            'type' => 'oembed',
+        ) );    
+
+    }
 	
 }
 add_action( 'cmb2_admin_init', 'register_settings_metabox' );

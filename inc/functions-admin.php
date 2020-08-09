@@ -1,4 +1,5 @@
 <?php
+include('links/init-links.php');
 include('bulletins/init-bulletins.php');
 include('calendar/init-calendar.php');
 include('events/init-events.php');
@@ -6,6 +7,7 @@ include('galleries/init-galleries.php');
 include('sermons/init-sermons.php');
 //include('pages/init-pages.php');
 include('admin/init-frontpage.php');
+include('admin/load-theme.php');
 include('infohub/init-info.php');
 
 /*************************************************************
@@ -13,26 +15,84 @@ ADMIN MENU
 **************************************************************/
 
 function remove_admin_menus () {
-	if (!current_user_can('manage_options')){ // Only proceed if user does not have admin role.
-		//remove_menu_page('index.php'); 				// Dashboard
-		//remove_menu_page('edit.php'); 				// Posts
-		//remove_menu_page('upload.php'); 			// Media
-		//remove_menu_page('link-manager.php'); 			// Links
-		//remove_menu_page('edit.php?post_type=page'); 		// Pages
-		//remove_menu_page('edit-comments.php'); 			// Comments
-		//remove_menu_page('themes.php'); 			// Appearance
-		//remove_menu_page('plugins.php'); 			// Plugins
-		//remove_menu_page('users.php'); 				// Users
-		//remove_menu_page('tools.php'); 				// Tools
-		//remove_menu_page('options-general.php'); 		// Settings
- 
-		//remove_submenu_page( 'edit.php', 'edit-tags.php?taxonomy=post_tag' );	// Remove posts->tags submenu
-		//remove_submenu_page( 'edit.php', 'edit-tags.php?taxonomy=category' );	// Remove posts->categories submenu
-		//remove_submenu_page( 'themes.php', 'themes.php' );
-		//remove_submenu_page( 'themes.php', 'widgets.php' );
-	}
+
+	if( !current_user_can('editor') && !current_user_can('administrator') ) {
+			// Only proceed if user does not have admin role.
+			remove_menu_page('index.php'); 				// Dashboard
+			//remove_menu_page('edit.php'); 				// Posts
+			remove_menu_page('upload.php'); 			// Media
+			//remove_menu_page('link-manager.php'); 			// Links
+			//remove_menu_page('edit.php?post_type=page'); 		// Pages
+			remove_menu_page('edit-comments.php'); 			// Comments
+			//remove_menu_page('themes.php'); 			// Appearance
+			//remove_menu_page('plugins.php'); 			// Plugins
+			//remove_menu_page('users.php'); 				// Users
+			remove_menu_page('tools.php'); 				// Tools
+			//remove_menu_page('options-general.php'); 		// Settings
+	
+			//remove_submenu_page( 'edit.php', 'edit-tags.php?taxonomy=post_tag' );	// Remove posts->tags submenu
+			//remove_submenu_page( 'edit.php', 'edit-tags.php?taxonomy=category' );	// Remove posts->categories submenu
+			//remove_submenu_page( 'themes.php', 'themes.php' );
+			//remove_submenu_page( 'themes.php', 'widgets.php' );
+		}
+		if ( current_user_can('editor') ) {
+			remove_menu_page('edit-comments.php'); 
+			remove_menu_page('tools.php'); 	
+		}
 }
 add_action('admin_menu', 'remove_admin_menus');
+
+
+function my_login_redirect( $redirect_to, $request, $user ) {
+    //validating user login and roles
+	if( current_user_can('editor')	|| current_user_can('administrator') ) {
+		return $redirect_to;
+	}
+	$redirect_to = admin_url( 'profile.php' );
+	return $redirect_to;
+		
+}
+ 
+add_filter( 'login_redirect', 'my_login_redirect', 10, 3 );
+
+function editor_redirect() {
+	if( current_user_can('editor') ) {
+
+		global $pagenow;
+
+
+        if (  $pagenow == 'tools.php' || $pagenow == 'edit-comments.php' ) {
+			wp_redirect( admin_url( '/profile.php' ) );
+			exit;
+		}
+		
+	}
+}
+add_action( 'admin_init', 'editor_redirect' );
+
+function contributor_redirect() {
+	if( !current_user_can('editor') && !current_user_can('administrator') ) {
+
+		global $pagenow;
+		if ( $pagenow == 'index.php' ) {
+
+			wp_redirect( admin_url( '/profile.php' ) );
+			exit;
+	
+		}
+		
+	}
+}
+add_action( 'admin_init', 'contributor_redirect' );
+
+function wps_change_role_name() {
+	global $wp_roles;
+	if ( ! isset( $wp_roles ) )
+	$wp_roles = new WP_Roles();
+	$wp_roles->roles['editor']['name'] = 'Content Editor';
+	$wp_roles->role_names['editor'] = 'Content Editor';
+}
+add_action('init', 'wps_change_role_name');
 
 /*************************************************************
 WORDPRESS ADMIN BAR
@@ -125,4 +185,34 @@ function help_options() {
 	include('theme-options-inc/help.php');
 }
 //add_action( 'admin_menu', 'my_help_menu' );
+
+function create_ba_theme_roles() {
+
+	// All other roles are found in their CPT file
+
+	// Mod contributor role
+	$con = get_role( 'contributor' );
+	$con->remove_cap( 'delete_posts' );
+	$con->remove_cap( 'edit_posts' );
+	$con->add_cap( 'upload_files' );
+
+	// Add Post Author Role
+	$cap = array(
+		'delete_posts' => true,
+		'delete_published_posts' => true,
+		'edit_posts' => true,
+		'edit_published_posts' => true,
+		'publish_posts' => true,
+		'manage_categories' => true
+	);
+	add_role( 'post_author', 'Post Author', $cap );
+
+
+	// Remove Subscriber and Author
+	$wp_roles = new WP_Roles();
+	$wp_roles->remove_role("subscriber");
+	$wp_roles->remove_role("author");
+
+}
+add_action('after_switch_theme', 'create_ba_theme_roles');
 ?>

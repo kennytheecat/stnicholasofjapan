@@ -17,13 +17,7 @@ get_header();
 
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main">
-		<?php
-		wp_nav_menu( array(
-			'menu'     => 'Main Nav',
-			'sub_menu' => true,
-			'container_class' => 'submenu'
-			) );
-		?>
+
 		<?php
 		while ( have_posts() ) :
 			the_post();

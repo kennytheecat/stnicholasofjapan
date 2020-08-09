@@ -17,7 +17,7 @@ function manage_sermons_columns($column_name, $id) {
     global $wpdb;
     switch ($column_name) {
     case 'sermon_date':
-        echo get_post_meta( get_the_ID(), '_podox_sermons_date', 1 );		
+        echo get_post_meta( get_the_ID(), '_podox_sermon_date', 1 );		
             break;
  
     } // end switch

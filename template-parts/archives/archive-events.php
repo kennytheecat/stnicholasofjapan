@@ -12,7 +12,7 @@ $end_date = get_post_meta( $post->ID, '_event_end_date', true);
 $duration = get_post_meta( $post->ID, '_event_link', true);
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class('archive_entry_event'); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class(array('archive_entry', 'archive_entry_event')); ?>>
 	<header class="entry-header">
     <?php 
     echo '<div class="image">';

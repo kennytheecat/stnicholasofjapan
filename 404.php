@@ -24,24 +24,11 @@ get_header();
 					<?php
 					get_search_form();
 
+					get_template_part('template-parts/frontpage/videos'); 
+					
 					get_template_part('template-parts/frontpage/latest'); 
 					?>
 
-					<div class="videos">
-						<h3>What is Orthodoxy?</h3>
-						<div class="video">
-						<?php 
-						$settings = get_option( 'settings', true);
-						echo wp_oembed_get($settings['video-404-1']);
-						?>
-						</div>
-						<div class="video">
-						<?php 
-						$settings = get_option( 'settings', true);
-						echo wp_oembed_get($settings['video-404-2']);
-						?>
-						</div>						
-					</div>
 
 
 				</div><!-- .page-content -->

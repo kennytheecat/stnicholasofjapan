@@ -91,7 +91,7 @@
 		<div class="wrapper">
 
 			<!-- used to use tr_main_nav() from bones. switched back to _s. unneeded arguments -->
-			<?php wp_nav_menu( array( 'menu' => 'Primary', 'menu_class' => 'nav-menu', 'after' => '<span class="mobile-button"></span>') ); ?>
+			<?php wp_nav_menu( array( 'theme_location' => 'menu-1', 'menu_class' => 'nav-menu', 'after' => '<span class="mobile-button"></span>') ); ?>
 			<div class="search-not-mobile">
 			<i class="fa fa-search"></i>
 			<a href="" class="screen-reader-text"><?php _e( 'Search', 'tabula-rasa' ); ?></a>
@@ -101,8 +101,6 @@
 		</div><!-- end .wrapper --> 
 
 		</nav><!-- #site-navigation -->
-        
-
 		
 		</div><!-- end .wrapper --> 
 	</header><!-- #masthead -->

@@ -10,7 +10,7 @@
 get_header();
 ?>
 
-	<section id="primary" class="content-area">
+<div id="primary" class="content-area">
 		<main id="main" class="site-main">
 
 		<?php if ( have_posts() ) : ?>
@@ -24,6 +24,12 @@ get_header();
 				</h1>
 			</header><!-- .page-header -->
 
+			<div class="block">
+				<div class="wrapper"></div>
+			</div>
+
+			<div class="entry-content">
+
 			<?php
 			/* Start the Loop */
 			while ( have_posts() ) :
@@ -34,11 +40,16 @@ get_header();
 				 * If you want to overload this in a child theme then include a file
 				 * called content-search.php and that will be used instead.
 				 */
-				get_template_part( 'template-parts/content', 'search' );
+				get_template_part( 'template-parts/archives/archive', get_post_type() );
 
 			endwhile;
 
 			the_posts_navigation();
+			?>
+			
+			</div> <!-- .entry-content --> 
+
+			<?php
 
 		else :
 
@@ -46,9 +57,8 @@ get_header();
 
 		endif;
 		?>
-
 		</main><!-- #main -->
-	</section><!-- #primary -->
+	</div><!-- #primary -->
 
 <?php
 get_sidebar();

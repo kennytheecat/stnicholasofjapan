@@ -55,3 +55,18 @@ jQuery(document).ready(function ($) {
     return false;
   });
 });
+
+
+// Navigation Menu resizer
+
+jQuery(document).ready(function ($) {
+  $(window).scroll(function () {
+    if ($(document).scrollTop() > 50) {
+      $('body').addClass('menu-shrink');
+      $('body').removeClass('menu-base');
+    } else {
+      $('body').removeClass('menu-shrink');
+      $('body').addClass('menu-base');
+    }
+  });
+});

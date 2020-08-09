@@ -1,8 +1,14 @@
 <?php
 // Check to see if post types are empty
-$media_array = array( 'post', 'events', 'galleries', 'sermons' );
+$media_array = array( 'post', 'events', 'galleries', 'sermons', 'bulletins', 'links' );
 foreach ( $media_array as $posttype ) {
-    $hasposts = get_posts('post_type=' . $posttype );
+    $args = array(
+        'post_type' => $posttype,
+        'date_query' => array(
+            'after' => date('c', strtotime( '-4 months' )),
+        ),
+    );
+    $hasposts = get_posts( $args );
     if ( $hasposts ) {
         $media_array_checked[] = $posttype;
     }
@@ -14,43 +20,70 @@ $media_array = $media_array_checked;
 // make an array of just values for get_posts
 $post_type_array = array( 'post' );
 foreach($media_array as $posttype ) {
+    if ( $posttype == 'bulletins') continue;
     $post_type_array[] = $posttype;
 }
+$ppp = 3;
+if ( is_front_page() ) {
+    $ppp = 4;
+}
 $args = array( 
-    'posts_per_page'    => 4, 
+    'posts_per_page'    => $ppp, 
     'status'            => 'publish',
-    'post_type'         => $post_type_array
+    'post_type'         => $post_type_array,
+    'date_query' => array(
+        'after' => date('c', strtotime( '-4 months' )),
+    ),
 );
 $items = get_posts( $args );
 
-        
-//Check for weekly bulletin
-// Are there any weekly bulletlins
-global $wpdb;
-$results = $wpdb->get_results( "SELECT * FROM bulletins");
-if ( $results ) {
-    $media_array[] = 'weekly bulletins';
+
+$terms = get_terms( array(
+    'hide_empty' => 0,
+    'taxonomy' => 'bulletin_types',
+) );
+foreach ( $terms as $term ) {
+    
+    $args = array( 
+        'posts_per_page'    => 1, 
+        'post_status'            => array( 'publish' ),
+        'post_type'         => 'bulletins',
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'bulletin_types',
+                'field' => 'id',
+                'terms' => $term->term_id,
+            ),
+        ),   
+        'meta_query' => array(
+            array(
+                'key' => '_bulletin_date',
+                'value' => date('c', strtotime( '-4 months' )),
+                'type' => 'numeric',
+                'compare' => '<='
+            )
+        ),
+        'orderby' => 'meta_value',
+        'meta_key' => '_bulletin_date',     
+    );
+    $bulletins = get_posts( $args );
+
+    if ( $bulletins ) {
+
+
+        foreach ( $bulletins as $bulletin ) {
+            $items[] = $bulletin;
+        }
+    }
 }
-
-// Is there a recent weekly bulletin
-$results = $wpdb->get_results( "SELECT * FROM bulletins WHERE date BETWEEN DATE_SUB(NOW(), INTERVAL 3 DAY) AND DATE_ADD(NOW(), INTERVAL 2 DAY) ORDER BY date DESC");
-
-foreach ($results as $result) {
-    $result->post_date = $result->date;
-    $bulletin_naming = get_option( 'bulletin_naming');
-    $result->post_title = date( $bulletin_naming, strtotime($result->date ) );
-    $result->post_type = 'bulletin';
-    $items[] = $result;
-}
-
 // Sort the array by most recent post date
 $date = array_column($items, 'post_date');
 array_multisort($date, SORT_DESC, $items );
 
 // make sure there is only 4 items
-$items = array_slice( $items, 0, 4 );
+$items = array_slice( $items, 0, $ppp );
 
-// Check if there are at lest 3 items
+// Check if there are at least 3 items
 $goahead = false;
 $count = $items;
 if ( $count >= 2 ) { $goahead = true; } else { $goahead = false; }
@@ -73,7 +106,13 @@ if ( $goahead == true ) {
             if ( $posttype == 'post') {
                 $posttype = 'articles';
             }
-            echo '<a href="' . home_url() . '/' . str_replace( ' ', '-', $posttype) . '/">' . ucwords($posttype) . '</a>';
+            $link = str_replace( ' ', '-', $posttype);
+            $title = ucwords($posttype);
+            if ( $posttype == 'bulletins') {
+                $link = 'bulletins-newsletters';
+                $title = 'Bulletins/Newsletters';
+            }           
+            echo '<a href="' . home_url() . '/' . $link . '/">' . $title . '</a>';
             if ( $i < $count ) {
                 echo ' \ ';
             }
@@ -105,17 +144,24 @@ if ( $goahead == true ) {
                     $type = 'Document';
                     break;
 
+                case 'links':
+                    $type = 'Link';
+                    $link = get_post_meta( $post->ID, '_link_file', true );
+                    break;
+
                 case 'events':
                     $type = 'Event';
                     break;
 
                 case 'galleries':
                     $type = 'Gallery'; 
+                    $link = get_post_meta( $post->ID, '_gallery_link', true );
                     break;
 
-                case 'bulletin':
-                    $type = 'Bulletin';
-                    $link = home_url() . $post->file;
+                case 'bulletins':
+                    $term = get_the_terms( $post->ID, 'bulletin_types' );
+                    $type = $term[0]->name;
+                    $link = get_post_meta( $post->ID, '_bulletin_file', true );
                     break;                    
 
                 default:

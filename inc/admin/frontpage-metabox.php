@@ -1,5 +1,31 @@
 <?php
 /**
+ * Gets a number of posts and displays them as options
+ * @param  array $query_args Optional. Overrides defaults.
+ * @return array             An array of options that matches the CMB2 options array
+ */
+function cmb2_get_post_options( $query_args ) {
+
+    $args = wp_parse_args( $query_args, array(
+        'post_type'   => 'page',
+        'numberposts' => -1,
+    ) );
+
+    $posts = get_posts( $args );
+
+    $post_options = array();
+    if ( $posts ) {
+        foreach ( $posts as $post ) {
+          $post_options[ $post->ID ] = $post->post_title;
+        }
+    }
+
+    return $post_options;
+}
+
+
+
+/**
  * Hook in and register a metabox to handle a theme options page and adds a menu item.
  */
 function register_frontpage_metabox() {
@@ -10,7 +36,7 @@ function register_frontpage_metabox() {
 		'id'           => 'frontpage',
 		'title'        => 'Front Page',
 		'object_types' => array( 'options-page' ),
-		'option_key'   => 'frontpage',
+        'option_key'   => 'frontpage',
 	);
 	// 'tab_group' property is supported in > 2.4.0.
 	if ( version_compare( CMB2_VERSION, '2.4.0' ) ) {
@@ -68,14 +94,18 @@ function register_frontpage_metabox() {
         'name' => __( 'Button #1 Link ', 'bothand' ),
         'desc' => __( '', 'bothand' ),
         'id'   => 'hero_button_1_url',
-        'type' => 'post_search_text',
-        'post_type'   => array('post', 'page', 'sermons'),
-        // Default is 'checkbox', used in the modal view to select the post type
-        'select_type' => 'radio',
-        // Will replace any selection with selection from modal. Default is 'add'
-        'select_behavior' => 'replace',        
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options',      
     ) );  
     
+    $cmb->add_field( array(
+		'name' => esc_html__( 'Button #1 Link(Custom URL)', 'cmb2' ),
+		'desc' => esc_html__( 'If filled in, will override the above link', 'cmb2' ),
+		'id'   => 'hero_button_1_url_override',
+		'type' => 'text_url',
+    ) );
+
     $cmb->add_field( array(
         'name' => __( 'Button #2 Text ', 'bothand' ),
         'desc' => __( '', 'bothand' ),
@@ -87,13 +117,17 @@ function register_frontpage_metabox() {
         'name' => __( 'Button #2 Link ', 'bothand' ),
         'desc' => __( '', 'bothand' ),
         'id'   => 'hero_button_2_url',
-        'type' => 'post_search_text',
-        'post_type'   => array('post', 'page', 'sermons'),
-        // Default is 'checkbox', used in the modal view to select the post type
-        'select_type' => 'radio',
-        // Will replace any selection with selection from modal. Default is 'add'
-        'select_behavior' => 'replace',  
-    ) );      
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options', 
+    ) );  
+
+    $cmb->add_field( array(
+		'name' => esc_html__( 'Button #2 Link(Custom URL)', 'cmb2' ),
+		'desc' => esc_html__( 'If filled in, will override the above link', 'cmb2' ),
+		'id'   => 'hero_button_2_url_override',
+		'type' => 'text_url',
+    ) );
 
     $cmb->add_field( array(
         'name' => esc_html__( 'Services Section', 'cmb2' ),
@@ -110,10 +144,10 @@ function register_frontpage_metabox() {
     ) ); 
 
     $cmb->add_field( array(
-        'name' => __( 'Google Map Link', 'bothand' ),
-        'desc' => __( '', 'bothand' ),
-        'id'   => 'map_embed',
-        'type' => 'textarea_code',
+        'name' => __( 'Google Map Address', 'bothand' ),
+        'desc' => __( 'Leave blank, unless you want to display a different map than your church\' default location.', 'bothand' ),
+        'id'   => 'map_address_override',
+        'type' => 'text',
     ) );
     
 
@@ -140,14 +174,14 @@ function register_frontpage_metabox() {
     
     $cmb->add_field( array(
         'name' => __( 'Welcome Message Image', 'bothand' ),
-        'desc' => __( '', 'bothand' ),
+        'desc' => __( 'You can either display a welcome message image or a welcome message video, but not both. Fill out one and leave the other blank.', 'bothand' ),
         'id'   => 'welcome_image',
         'type' => 'file',
     ) );     
 
     $cmb->add_field( array(
         'name' => __( 'Welcome Message Video', 'bothand' ),
-        'desc' => __( '', 'bothand' ),
+        'desc' => __( 'You can either display a welcome message image or a welcome message video, but not both. Fill out one and leave the other blank.', 'bothand' ),
         'id'   => 'welcome_video',
         'type' => 'oembed',
     ) );        
@@ -209,13 +243,17 @@ function register_frontpage_metabox() {
         'name' => __( 'Prayer Request Button Url', 'bothand' ),
         'desc' => __( '', 'bothand' ),
         'id'   => 'prayer_button_url',
-        'type' => 'post_search_text',
-        'post_type'   => array('post', 'page', 'sermons'),
-        // Default is 'checkbox', used in the modal view to select the post type
-        'select_type' => 'radio',
-        // Will replace any selection with selection from modal. Default is 'add'
-        'select_behavior' => 'replace',  
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options',
     ) );          
+
+    $cmb->add_field( array(
+		'name' => esc_html__( 'Prayer Request Button Url(Custom URL)', 'cmb2' ),
+		'desc' => esc_html__( 'If filled in, will override the above link', 'cmb2' ),
+        'id'   => 'prayer_button_url_override',
+		'type' => 'text_url',
+    ) );    
 
     $cmb->add_field( array(
         'name' => esc_html__( 'Ask the Priest', 'cmb2' ),
@@ -249,13 +287,17 @@ function register_frontpage_metabox() {
         'name' => __( 'Ask the Priest Button Url', 'bothand' ),
         'desc' => __( '', 'bothand' ),
         'id'   => 'ask_button_url',
-        'type' => 'post_search_text',
-        'post_type'   => array('post', 'page', 'sermons'),
-        // Default is 'checkbox', used in the modal view to select the post type
-        'select_type' => 'radio',
-        // Will replace any selection with selection from modal. Default is 'add'
-        'select_behavior' => 'replace',  
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options',
     ) );      
+
+    $cmb->add_field( array(
+		'name' => esc_html__( 'Ask the Priest Button Url(Custom URL)', 'cmb2' ),
+		'desc' => esc_html__( 'If filled in, will override the above link', 'cmb2' ),
+		'id'   => 'ask_button_url_override',
+		'type' => 'text_url',
+    ) );  
     
     // $group_field_id is the field id string, so in this case: $prefix . 'demo'
     $group_field_id = $cmb->add_field( array(

@@ -11,6 +11,7 @@
 $start_date = get_post_meta( $post->ID, '_event_start_date', true);
 $end_date = get_post_meta( $post->ID, '_event_end_date', true);
 $duration = get_post_meta( $post->ID, '_event_duration', true);
+$docs = get_post_meta( $post->ID, '_event_docs', true);
 
 $locations = get_the_terms( $post->ID, 'locations' );
 $term_id = $locations[0]->term_id;
@@ -58,7 +59,7 @@ $location_full_map = str_replace( ' ', '%20', $location_full );
 	if ( $end_date ) {
 		$dates = $dates . ' to ' . date( 'F d, Y', strtotime( $end_date ) );
 	}
-	if ( $dates || $duration || $location_full ) { 
+	if ( $dates || $duration || $location_full || $docs ) { 
 		echo '<h3>Event Details</h3>';
 		echo '<ul>';
 		if ( $dates ) {
@@ -69,6 +70,18 @@ $location_full_map = str_replace( ' ', '%20', $location_full );
 		}
 		if ( $location_full ) {
 			echo '<li><span>Location: </span>' . $location_full . '</li>';
+		}
+		if ( $docs ) {
+			$count = count($docs);
+			$i = 1;
+			foreach ( $docs as $key => $doc ) {
+				$docs_list .= '<a href="' . $doc . '">' . get_the_title($key) . '</a>';
+				if ( $i != $count )  {
+					$docs_list .= ', ';
+				}
+				$i++;
+			}
+			echo '<li><span>Documents: </span>' . $docs_list . '</li>';
 		}
 		echo '</ul>';
 	}
@@ -91,7 +104,7 @@ $location_full_map = str_replace( ' ', '%20', $location_full );
 		) );
 		?>
 
-		<div class="location">
+		<div class="location fluid-width-video-wrapper" style="padding-top: 56.25%;">
 			<iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q='<?php echo $location_full_map; ?>'&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
 		</div>
 

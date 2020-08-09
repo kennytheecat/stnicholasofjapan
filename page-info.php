@@ -21,16 +21,33 @@ $meta = get_post_meta( $post->ID, 'info', true);
 	<div id="primary" class="content-area full-width">
 		<main id="main" class="site-main">
 
-        <section class="spotlights">
-            <div class="spotlights-wrapper"> 
+        <header class="page-header">
+				<?php the_title( '<h1 class="entry-title">', '</h1>' ); 
+				?>
+			</header><!-- .page-header -->
+
+        <!-- <section class="spotlights">
+            <div class="spotlights-wrapper">  -->
                 <?php
+                			wp_nav_menu( array( 
+                                'theme_location' => 'infohub', 
+                                'menu_class' => 'info-menu', 
+                                'depth' => 1, 
+                                'before' => '<div class="button"><p>', 
+                                'after' => '</p></div>' 
+                                ) 
+                            ) ; 
+               /*
                 foreach ( $meta as $item ) {
                     $new_url = get_the_permalink($item['url'] );
                     echo '<div class="button"><h4><a href="' . $new_url. '">' . $item['title'] . '</a></h4></div>';
                 }
+                */
                 ?>
-            </div>
+            <!--
+                </div>
         </section>
+            -->
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

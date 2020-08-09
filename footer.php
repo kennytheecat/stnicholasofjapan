@@ -9,6 +9,18 @@
  * @package Tabula_Rasa
  */
 
+$settings = get_option( 'settings', true);
+$name = $settings['basic_info_name'];
+$street = $settings['basic_info_address_street'];
+$city = $settings['basic_info_address_city'];
+$state = $settings['basic_info_address_state'];
+$zip = $settings['basic_info_address_zip'];
+$location_full = $name . ' ' . $street . ', ' . $city . ', ' . $state . '  ' . $zip;
+$location_google = 'http://maps.google.com/?q=' . str_replace( array( ', ', '  ', ' '), '+', $location_full);
+$phone = $settings['basic_info_phone'];
+
+$sm_array = get_sm_array();
+
 ?>
 
 	</div><!-- #content -->
@@ -23,24 +35,28 @@
 			<div class="footer-top">
 				<div class="wrapper">
 
-				<div class="social-media">
+					<div class="social-media">
 						<ul>
-							<li><a href="www.facebook.com"></a></li>
-							<li><a href="www.instagram.com"></a></li>
-							<li><a href="www.youtube.com"></a></li>
+						<?php
+						
+						foreach ( $sm_array as $value ) {
+
+							if ( $settings['basic_info_' . $value] ) {
+								echo '<li><a href="' . $settings['basic_info_' . $value] . '"></a></li>';
+							}		
+						}		
+													
+						?>			
 						</ul>
 					</div>				
 
 					<div class="site-info">
 						<ul>
-							<li class="address">St Patrick Orthodox Church, 123 Main Street, Anytown, USA 00000</li>
-							<li class="phone"><a href="tel:1-555-555-5555">555-555-5555</a></li>
-							<li class="email">Contact Us</li>
+							<li class="address"><a href="<?php echo $location_google; ?>"><?php echo $location_full; ?></a></li>
+							<li class="phone"><a href="tel:<?php echo $phone; ?>"><?php echo $phone; ?></a></li>
+							<li class="email"><a href="<?php echo home_url(); ?>/contact/">Contact Us</a></li>
 						</ul>
 					</div><!-- .site-info -->
-
-
-
 
 				</div><!-- end .wrapper -->
 			</div><!-- end .footer-top -->
@@ -49,11 +65,23 @@
 				<div class="wrapper">
 
 					<div class="footer-services">
-						<ul>
-							<li>Sunday - 8:30am, 9:30am</li> |
-							<li>Wednesday - 6:30pm</li> |
-							<li>Saturday - 5:00pm</li>
-						</ul>
+						<?php 
+						for( $i = 1; $i <= 4; $i++ ) {
+							${'line' . $i} = $settings['footer_line_' . $i];
+							if ( ${'line' . $i} ) { $count = $i; }						
+						}
+						
+						echo '<ul>';
+						for( $i = 1; $i <= $count; $i++ ) { 
+							echo '<li>' . ${'line' . $i} . '</li>';	
+
+							if ( $i != $count ) {
+								echo '<span class="sep"> | </span>';	
+							}
+											
+						}
+						echo '</ul>';
+						?>
 					</div>
 
 					<div class="both-and">

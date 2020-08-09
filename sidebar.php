@@ -11,13 +11,10 @@
 <aside id="secondary" class="widget-area">
 	<div class="wrapper">
 		<?php dynamic_sidebar( 'sidebar-1' ); ?>
-		<button>Plan a Visit</button>
-		<button>What is Orthodoxy</button>
-		<button>Submit a Prayer Request</button>
-		<button>Ask a Question</button>
 
-		<div class="tree">
-			<div class="wrapper"></div>
-		</div>		
+		<?php get_template_part('template-parts/sidebar/sidebar-buttons');  ?>
+
+		<?php get_template_part('template-parts/sidebar/sidebar-image');  ?>
+		
 	</div>
 </aside><!-- #secondary -->
