@@ -14,7 +14,7 @@ function load_ba_theme() {
     //publish_ba_pages();
 
     // Add Caldera Forms Content
-    //load_contact_forms();
+    load_contact_forms();
 
     // Add menus
 
@@ -23,14 +23,14 @@ function load_ba_theme() {
     update_option( 'frontpage', $frontpage );
 
     // Load Settings Default Options
-    //$settings = get_settings_array();
-    //update_option( 'settings', $settings );
+    $settings = get_settings_array();
+    update_option( 'settings', $settings );
     
 
     // Set option so process is not ran twice
     //update_option( 'theme_installed', true );
 }
-//add_action('after_switch_theme', 'load_ba_theme' );
+add_action('after_switch_theme', 'load_ba_theme' );
 
 
 function get_ba_content() {
