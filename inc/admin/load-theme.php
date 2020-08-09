@@ -8,29 +8,29 @@ function load_ba_theme() {
 
     // Add Pages with Content
     //get json data for post by id
-    get_ba_content();
+    //get_ba_content();
 
     // Add Pages without content
-    publish_ba_pages();
+    //publish_ba_pages();
 
     // Add Caldera Forms Content
-    load_contact_forms();
+    //load_contact_forms();
 
     // Add menus
 
     // Load Front Page Default Options
     $frontpage = get_frontpage_array();
-    //update_option( 'frontpage', $frontpage );
+    update_option( 'frontpage', $frontpage );
 
     // Load Settings Default Options
-    $settings = get_settings_array();
-    update_option( 'settings', $settings );
+    //$settings = get_settings_array();
+    //update_option( 'settings', $settings );
     
 
     // Set option so process is not ran twice
     //update_option( 'theme_installed', true );
 }
-add_action('after_switch_theme', 'load_ba_theme' );
+//add_action('after_switch_theme', 'load_ba_theme' );
 
 
 function get_ba_content() {
@@ -41,13 +41,14 @@ function get_ba_content() {
     );
     
     foreach( $slugs as $slug ) {
-        $url = 'http://theorthodoxfaith.com/wp-json/wp/v2/posts/' . $slug . '/';
+        $url = 'http://www.bothanddesign.com/wp-json/wp/v2/posts?slug=' . $slug;
         $response = wp_remote_get( $url );
         $results = json_decode( wp_remote_retrieve_body( $response ), true );	
         
+        
         $args = array(
-            'post_title'    => $results['title']['rendered'],
-            'post_content'  => $results['content']['rendered'],
+            'post_title'    => $results[0]['title']['rendered'],
+            'post_content'  => $results[0]['content']['rendered'],
             'post_status'   => 'publish',
             'post_type'			=> 'page'
         );
@@ -133,6 +134,8 @@ function load_contact_forms() {
 
 function get_frontpage_array() {
 
+    $long_content = get_long_content();
+
     $frontpage = array(
         //'hero_image' => 'test',
         'hero_slogan' => 'Welcome Home',
@@ -142,15 +145,15 @@ function get_frontpage_array() {
         'hero_button_2_url' =>  '',
         'hero_button_2_override' =>  '',
         'hero_button_2_text' =>  'What is Orthodoxy?',
-        'content' =>    $long_content[content],
-        'map_embed' =>  $long_content[map_embed],
+        'content' =>    $long_content['content'],
+        'map_embed' =>  $long_content['map_embed'],
         'welcome_heading'   =>  'Welcome to St Nicholas!',
-        'welcome_content'   =>  $long_content[welcome_content],
+        'welcome_content'   =>  $long_content['welcome_content'],
         'prayer_heading'   =>  'Need Prayer?',
-        'prayer_content'   =>  $long_content[prayer_content],
+        'prayer_content'   =>  $long_content['prayer_content'],
         'prayer_button' =>  'Submit a Prayer Request',
         'ask_heading'   =>  'Have Questions about Orthodoxy?',
-        'ask_content'   =>  $long_content[ask_content],
+        'ask_content'   =>  $long_content['ask_content'],
         'ask_button'    =>  'Submit a Question',
         //welcome_image_id' => 102
         //'welcome_image' => http://stnicholasofjapan.bothanddesign.com/wp-content/uploads/2019/11/frate_family-1.jpg

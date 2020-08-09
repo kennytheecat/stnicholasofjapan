@@ -3,7 +3,7 @@
 
         <?php 
         $intro = get_option('frontpage', true); 
-        if ( $intro['map_address_override'] ) {
+        if ( isset($intro['map_address_override']) ) {
             $location_full_map = str_replace( ' ', '%20', $intro['map_address_override'] );
         } else {
             $settings = get_option( 'settings', true);

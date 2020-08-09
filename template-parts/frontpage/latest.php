@@ -83,7 +83,7 @@ if ( $terms ) {
 }
 // Sort the array by most recent post date
 $date = array_column($items, 'post_date');
-if ( $date ) }{
+if ( $date ) {
     array_multisort($date, SORT_DESC, $items );
 }
 

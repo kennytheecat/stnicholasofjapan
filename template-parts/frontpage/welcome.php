@@ -14,10 +14,10 @@
 
         <div class="welcome_media">
             <?php 
-            if ( $intro['welcome_image'] ) {
+            if ( isset($intro['welcome_image'] ) ) {
                 echo '<img src="' . $intro['welcome_image'] . '" />';
             }     
-            if ( $intro['welcome_video'] ) {
+            if ( isset( $intro['welcome_video'] ) ) {
 				echo wp_oembed_get( $intro['welcome_video'] );
             }      
             ?> 

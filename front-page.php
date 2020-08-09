@@ -24,8 +24,9 @@ get_header();
             get_template_part('template-parts/frontpage/welcome'); 
             get_template_part('template-parts/frontpage/videos'); 
             get_template_part('template-parts/frontpage/engage'); 
-            get_template_part('template-parts/frontpage/latest'); 
-            get_template_part('template-parts/frontpage/events'); 
+            if ( have_posts() ) :
+            get_template_part('template-parts/frontpage/latest');
+            endif; 
 		?>
 
 		</main><!-- #main -->

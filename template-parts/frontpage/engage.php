@@ -5,16 +5,15 @@
     <?php
     $intro = get_option('frontpage', true);
 
-    if ( is_numeric( $intro['prayer_button_url'] ) ) {
-        $intro['prayer_button_url'] = get_the_permalink($intro['prayer_button_url'] );
-    }
-    if ( $intro['prayer_button_url_override'] ) {
+    $intro['prayer_button_url'] = isset( $intro['prayer_button_url']  ) ? get_the_permalink($intro['prayer_button_url'] ) : '';
+    
+    if ( isset($intro['prayer_button_url_override'] ) ) {
         $intro['prayer_button_url'] = $intro['prayer_button_url_override'];
     }
-    if ( is_numeric( $intro['ask_button_url'] ) ) {
-        $intro['ask_button_url'] = get_the_permalink($intro['ask_button_url'] );
-    }    
-    if ( $intro['ask_button_url_override'] ) {
+
+    $intro['ask_button_url'] = isset( $intro['ask_button_url']  ) ? get_the_permalink($intro['ask_button_url'] ) : '';   
+
+    if ( isset($intro['ask_button_url_override'] ) ) {
         $intro['ask_button_url'] = $intro['ask_button_url_override'];
     }  
     ?>

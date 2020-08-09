@@ -74,6 +74,23 @@ function register_settings_metabox() {
         'type' => 'text_email',
     ) );    
 
+
+    $cmb->add_field( array(
+        'name' => __( 'Default Contact Title', 'bothand' ),
+        'desc' => __( '', 'bothand' ),
+        'id'   => 'basic_info_contact_title',
+        'type'       => 'text',   
+    ) );
+
+    $cmb->add_field( array(
+        'name' => __( 'Default Contact Page', 'bothand' ),
+        'desc' => __( '', 'bothand' ),
+        'id'   => 'basic_info_contact_url',
+        'type'       => 'select',
+		'show_option_none' => true,
+        'options_cb' => 'cmb2_get_post_options',      
+    ) );
+
     $cmb->add_field( array(
         'name' => __( 'Sidebar Section', 'bothand' ),
         'desc' => __( 'Buttons', 'bothand' ),
