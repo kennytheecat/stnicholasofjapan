@@ -20,11 +20,11 @@ function load_ba_theme() {
 
     // Load Front Page Default Options
     $frontpage = get_frontpage_array();
-    update_option( 'frontpage', $frontpage );
+    //update_option( 'frontpage', $frontpage );
 
     // Load Settings Default Options
     $settings = get_settings_array();
-    update_option( 'settings', $settings );
+    //update_option( 'settings', $settings );
     
 
     // Set option so process is not ran twice
@@ -32,7 +32,19 @@ function load_ba_theme() {
 }
 add_action('after_switch_theme', 'load_ba_theme' );
 
+function load_contact_forms() {
 
+    $slugs = array( 'ask-the-priest-export', 'coffee-contact-export', 'general-contact-export', 'prayer-requests-export' );
+
+    foreach ( $slugs as $slug ) {
+        $location = get_template_directory_uri() . '/inc/admin/contact-forms/' . $slug . '.json';
+
+        $data = json_decode( file_get_contents($location ), true  );
+        $new_form_id = Caldera_Forms_Forms::import_form( $data, true );
+    }
+}
+
+/*
 function get_ba_content() {
 
     $slugs = array(
@@ -119,18 +131,9 @@ function publish_ba_pages() {
 
     // add bulletins templates, calendat emplates, contacts
 }
+*/
 
-function load_contact_forms() {
-
-    $slugs = array( 'ask-the-priest-export', 'coffee-contact-export', 'general-contact-export', 'prayer-requests-export' );
-
-    foreach ( $slugs as $slug ) {
-        $location = get_template_directory_uri() . '/inc/admin/contact-forms/' . $slug . '.json';
-
-        $data = json_decode( file_get_contents($location ), true  );
-        $new_form_id = Caldera_Forms_Forms::import_form( $data, true );
-    }
-}
+/*
 
 function get_frontpage_array() {
 
@@ -328,4 +331,5 @@ function get_long_content() {
     return $long_content;
     
 }
+*/
 ?>
