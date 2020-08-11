@@ -30,7 +30,7 @@ function load_ba_theme() {
     // Set option so process is not ran twice
     //update_option( 'theme_installed', true );
 }
-add_action('after_switch_theme', 'load_ba_theme' );
+//add_action('after_switch_theme', 'load_ba_theme' );
 
 function load_contact_forms() {
 
