@@ -103,7 +103,11 @@ add_action( 'init', 'custom_taxonomy_location_types', 0 );
 
 
 function create_event_roles () {
+	
+	remove_role( 'event_author' );
+
 	$cap = array(
+		'read'				=>	true,
 		'delete_events' => true,
 		'delete_published_events' => true,
 		'edit_events' => true,

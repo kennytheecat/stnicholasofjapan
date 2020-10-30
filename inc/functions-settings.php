@@ -52,13 +52,22 @@ function tr_scripts_and_styles() {
 	global $post;
 	
 	// FONTS
-  wp_enqueue_style( 'google-fonts', 'http://fonts.googleapis.com/css?family=PT+Serif|Open+Sans:400,700|Open+Sans+Condensed:700' );
-  wp_enqueue_style( 'font-awesome',  'http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');		
+  //wp_enqueue_style( 'google-fonts', 'http://fonts.googleapis.com/css?family=Open+Sans:400,700|Open+Sans+Condensed:700&display=swap' );
+  //wp_enqueue_style( 'local-font-awesome', get_stylesheet_directory_uri() . '/css/fontawesome/css/all.min.css' );
+  	
   
 	if (!is_admin()) {
 
+		/**
+ * Move jQuery to the footer. 
+ * src: https://wordpress.stackexchange.com/questions/173601/enqueue-core-jquery-in-the-footer
+ */
+		wp_scripts()->add_data( 'jquery', 'group', 1 );
+		wp_scripts()->add_data( 'jquery-core', 'group', 1 );
+		wp_scripts()->add_data( 'jquery-migrate', 'group', 1 );
+
     // register main stylesheet
-		wp_enqueue_style( 'tabula-rasa-style', get_stylesheet_directory_uri() . '/css/style.css' );
+		wp_enqueue_style( 'tabula-rasa-style', get_stylesheet_directory_uri() . '/css/style.min.css' );
 		
     // ie-only style sheet
 		global $wp_styles; // call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
@@ -72,8 +81,9 @@ function tr_scripts_and_styles() {
 		//wp_enqueue_script( 'hide-search', get_template_directory_uri() . '/js/mmenu.js', array( 'jquery' ), '20140703', true );
 		
 		//adding scripts file in the footer
-		wp_enqueue_script( 'tabula_rasa-js', get_stylesheet_directory_uri() . '/js/scripts.js', array( 'jquery' ), '', true );
+		wp_enqueue_script( 'tabula_rasa-js_custom', get_stylesheet_directory_uri() . '/js/custom.js', array( 'jquery' ), '', true );
 
+		wp_enqueue_script( 'tabula_rasa-js_vendor', get_stylesheet_directory_uri() . '/js/vendor.js', array( 'jquery' ), '', true );
 		/*
 		wp_enqueue_script( 'superfish', get_template_directory_uri() . '/js/superfish.min.js', array( 'jquery' ), '20140703', true );
 		wp_enqueue_script( 'superfish-settings', get_template_directory_uri() . '/js/superfish-settings.js', array('superfish'), '20140703', true );
@@ -96,15 +106,30 @@ function tr_scripts_and_styles() {
 	// For shortcodes
 	//if( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'custom-shortcode') ) {}
 	
-	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+	/*if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}	
+	*/
 	 
 	// I recommend using a plugin to call jQuery using the google cdn. That way it stays cached and your site will load faster.
-	wp_enqueue_script( 'jquery' );	
+	//wp_enqueue_script( 'jquery' );	
 }
 add_action( 'wp_enqueue_scripts', 'tr_scripts_and_styles' );
 
+/*
+function my_style_loader_tag_filter($html, $handle) {
+
+  if($handle === 'font-awesome') {
+
+return str_replace("rel='stylesheet'", "media='print' onload='this.media='all';this.onload=null;'", $html);
+
+  }
+  
+  return $html;
+
+}
+add_filter('style_loader_tag', 'my_style_loader_tag_filter', 10, 2);
+*/
 /**************************************************************
 INCLUDES
 **************************************************************/
@@ -145,8 +170,49 @@ add_filter( 'excerpt_length', 'tr_excerpt_length' );
 POST THUMBNAILS
 **************************************************************/
 //add_image_size( $name, $width, $height, $crop );
-add_image_size( 'archive', 200, 150, true );
+add_image_size( 'hero', 2500 );
+//add_image_size( 'content', 1000  );
+add_image_size( 'content-mobile', 800 );
+//add_image_size( 'archive', 200, 150, true );
 
+/*
+* src: https://perishablepress.com/disable-wordpress-generated-images/
+*
+// disable generated image sizes
+function shapeSpace_disable_image_sizes($sizes) {
+	
+	unset($sizes['thumbnail']);    // disable thumbnail size
+	unset($sizes['medium']);       // disable medium size
+	unset($sizes['large']);        // disable large size
+	unset($sizes['medium_large']); // disable medium-large size
+	unset($sizes['1536x1536']);    // disable 2x medium-large size
+	unset($sizes['2048x2048']);    // disable 2x large size
+	
+	return $sizes;
+	
+}
+add_action('intermediate_image_sizes_advanced', 'shapeSpace_disable_image_sizes');
+
+// disable scaled image size
+add_filter('big_image_size_threshold', '__return_false');
+
+// disable other image sizes
+function shapeSpace_disable_other_image_sizes() {
+	
+	remove_image_size('post-thumbnail'); // disable images added via set_post_thumbnail_size() 
+	remove_image_size('thumbnail');   
+	remove_image_size('medium');
+	remove_image_size('large');
+	remove_image_size('medium_large');
+	remove_image_size('1536x1536');
+	remove_image_size('2048x2048');
+	remove_image_size('content');
+	remove_image_size('content-mobile');
+	remove_image_size('archive');
+	
+}
+add_action('init', 'shapeSpace_disable_other_image_sizes');
+*/
 /*************************************************************
 MISC
 **************************************************************/
@@ -176,16 +242,84 @@ function tr_social_menu() {
 
 /** Google Analytics
 **************************************************************/
-function google_analytics_tracking_code(){ ?>
-	<script>
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+function google_analytics_tracking_code(){ 
+	$settings = get_option( 'settings');
 
-		ga('create', 'UA-2432710-6', 'prescott-az.gov');
-		ga('send', 'pageview');
+	if ( $settings['gid'] ) {
+	?>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $settings['gid']; ?>"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', '<?php echo $settings['gid']; ?>');
 	</script>
+
 <?php }	
+}
 add_action('wp_head', 'google_analytics_tracking_code');
+
+// Add defer to javascript for page speed
+// Src: https://kinsta.com/blog/defer-parsing-of-javascript/
+function defer_parsing_of_js( $url ) {
+    if ( is_user_logged_in() ) return $url; //don't break WP Admin
+    if ( FALSE === strpos( $url, '.js' ) ) return $url;
+    //if ( strpos( $url, 'jquery.js' ) ) return $url;
+    return str_replace( ' src', ' defer src', $url );
+}
+add_filter( 'script_loader_tag', 'defer_parsing_of_js', 10 );
+
+
+// Mod media menu
+function your_custom_menu_item ( $items, $args ) {
+
+	$media_array = check_media_array();
+
+    if (  $args->menu_section == 'media') {
+
+		foreach ( $media_array as $posttype ) {
+
+            if ( $posttype == 'post') {
+                $posttype = 'articles';
+            }
+            $link = str_replace( ' ', '-', $posttype);
+            $title = ucwords($posttype);
+            if ( $posttype == 'bulletins') {
+                $link = 'bulletins-newsletters';
+                $title = 'Bulletins/Newsletters';
+			}    
+						
+			$items .= '<li><a href="' . home_url() . '/' . $link . '">' . $title . '</a></li>';
+		}
+    }
+    return $items;
+}
+add_filter( 'wp_nav_menu_items', 'your_custom_menu_item', 10, 2 );
+
+// Check which media categories acctually have items
+function check_media_array() {
+	$media_array = array( 'post', 'events', 'galleries', 'sermons', 'bulletins', 'links' );
+	$media_array_checked = array();
+
+	foreach ( $media_array as $posttype ) {
+		$args = array(
+			'post_type' => $posttype,
+			//'date_query' => array(
+			//	'after' => date('c', strtotime( '-4 months' )),
+			//),
+		);
+		
+		$hasposts = get_posts( $args );
+
+		if ( $hasposts ) {
+			$media_array_checked[] = $posttype;
+		}
+		
+	}
+	
+	return $media_array_checked;
+}
 ?>

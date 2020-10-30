@@ -91,4 +91,51 @@ function my_wp_nav_menu_objects_sub_menu( $sorted_menu_items, $args ) {
 function get_sm_array() {
   return $sm_array = array( 'Facebook' => 'facebook', 'Instagram' => 'instagram',  'YouTube' => 'youtube', 'LinkedIn' => 'linkedin', 'Flickr' => 'flickr', 'SnapChat' => 'snapchat');
 }
+
+
+// Filter video output
+/**
+ * src: https://wordpress.stackexchange.com/questions/110625/add-parameters-vimeo-videos-using-wordpress-embeds
+ */
+add_filter( 'oembed_result', function ( $html, $url, $args ) {
+  $doc = new DOMDocument();
+  $doc->loadHTML( $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+  $tags = $doc->getElementsByTagName( 'iframe' );
+
+  foreach ( $tags as $tag ) {
+      $iframe_src = $tag->attributes->getNamedItem('src')->value;
+
+      if ( false !== strpos( $iframe_src, 'youtube.com' ) ) {
+          // https://developers.google.com/youtube/player_parameters
+          $url = add_query_arg( array(
+              'autohide' => 1,
+              //'autoplay' => 1,
+              'controls' => 2,
+              'feature' => null,
+              'modestbranding' => 1,
+              'playsinline' => 1,
+              'rel' => 0,
+              'showinfo' => 0,
+          ), $iframe_src );
+      }
+
+      if ( false !== strpos( $iframe_src, 'vimeo.com' ) ) {
+          // https://developer.vimeo.com/player/embedding
+          $url = add_query_arg( array(
+              //'autoplay' => 1,
+              'badge' => 0,
+              'byline' => 0,
+              'portrait' => 0,
+              'title' => 0,
+          ), $iframe_src );
+      }
+
+      $tag->setAttribute( 'src', '' );
+      $tag->setAttribute( 'data-src', $url );
+
+      $html = $doc->saveHTML();
+  }
+
+  return $html; 
+}, 10, 3 );
 ?>

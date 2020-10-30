@@ -10,17 +10,16 @@ jQuery(document).ready(function ($) {
   });
 
   function toggleNav() {
-    if ($('.site-wrapper').hasClass('show-nav')) {
+    if ($('.site-canvas').hasClass('show-nav')) {
       // Do things on Nav Close
-      $('.site-wrapper').removeClass('show-nav');
+      $('.site-canvas').removeClass('show-nav');
     } else {
       // Do things on Nav Open
-      $('.site-wrapper').addClass('show-nav');
+      $('.site-canvas').addClass('show-nav');
     } //$('#site-wrapper').toggleClass('show-nav');
 
   }
 });
-
 /* 
  * Trying to toggle sub menus
  */
@@ -54,10 +53,7 @@ jQuery(document).ready(function ($) {
 
     return false;
   });
-});
-
-
-// Navigation Menu resizer
+}); // Navigation Menu resizer
 
 jQuery(document).ready(function ($) {
   $(window).scroll(function () {
@@ -70,3 +66,15 @@ jQuery(document).ready(function ($) {
     }
   });
 });
+
+function init() {
+  var vidDefer = document.getElementsByTagName('iframe');
+
+  for (var i = 0; i < vidDefer.length; i++) {
+    if (vidDefer[i].getAttribute('data-src')) {
+      vidDefer[i].setAttribute('src', vidDefer[i].getAttribute('data-src'));
+    }
+  }
+}
+
+window.onload = init;

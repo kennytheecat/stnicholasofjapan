@@ -1,7 +1,7 @@
 <?php
 function ba_register_bulletin_metabox() {
 	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_bulletin_';
+	$prefix = 'bulletin_';
 	/**
 	 * Sample metabox to demonstrate each field type included
 	 */
@@ -18,11 +18,11 @@ function ba_register_bulletin_metabox() {
 	) );	
 
 	$cmb_demo->add_field( array(
-		'name' => esc_html__( 'Test Date Picker', 'cmb2' ),
-		'desc' => esc_html__( 'field description (optional)', 'cmb2' ),
+		'name' => esc_html__( 'Date', 'cmb2' ),
+		'desc' => esc_html__( '', 'cmb2' ),
 		'id'   => $prefix . 'date',
 		'type' => 'text_date',
-		// 'date_format' => 'Y-m-d',
+		'date_format' => 'Y-m-d',
 	) );
 	
     $cmb_demo->add_field( array(

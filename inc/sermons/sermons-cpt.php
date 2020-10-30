@@ -101,7 +101,9 @@ function custom_taxonomy_service_types() {
 add_action( 'init', 'custom_taxonomy_service_types', 0 );
 
 function create_sermon_roles () {
+	remove_role( 'sermon_author' );
 	$cap = array(
+		'read'				=>	true,
 		'delete_sermons' => true,
 		'delete_published_sermons' => true,
 		'edit_sermons' => true,

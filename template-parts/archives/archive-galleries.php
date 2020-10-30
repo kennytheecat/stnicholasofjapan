@@ -15,7 +15,7 @@ $gallery_link = get_post_meta( $post->ID, '_gallery_link', true );
     <?php 
     echo '<div class="image">';
     echo '<a href="' . esc_url( $gallery_link ) . '">';
-        the_post_thumbnail('archive');
+        the_post_thumbnail('thumbnail');
     echo '</a>';
     echo '</div>';
 

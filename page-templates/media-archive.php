@@ -15,9 +15,13 @@
 
 get_header();
 
+$media_array = check_media_array();
+if (($key = array_search( 'bulletins', $media_array)) !== false) {
+    unset($media_array[$key]);
+}
 $args = array( 
     'status'            => 'publish',
-    'post_type'         => array('post', 'sermons', 'events', 'galleries', 'documents', 'links' ),
+    'post_type'         => $media_array,
 );
 
 $args['paged'] = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
@@ -41,7 +45,8 @@ $the_query = new WP_Query( $args );
 			wp_nav_menu( array( 
 				'menu'     => 'Main Nav',
 				'sub_menu' => true,
-				'container_class' => 'submenu'
+				'container_class' => 'submenu',
+				'menu_section'		=>	'media'
 				) );
 			?>
 
@@ -54,7 +59,7 @@ $the_query = new WP_Query( $args );
 <?php
 			/* Start the Loop */
 			while ( $the_query->have_posts() ) :
-                $the_query->the_post();
+				$the_query->the_post();
 
 				/*
 				 * Include the Post-Type-specific template for the content.

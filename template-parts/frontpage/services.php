@@ -15,6 +15,11 @@
             $zip = $settings['basic_info_address_zip'];
             $location_full = $name . ' ' . $street . ', ' . $city . ', ' . $state . '  ' . $zip;
             $location_full_map = str_replace( ' ', '%20', $location_full );
+
+            $src_set = isset( $settings['basic_info_map_image_id'] ) ? wp_get_attachment_image_srcset( $settings['basic_info_map_image_id'] ) : '';
+            $sizes = isset( $settings['basic_info_map_image_id'] ) ? wp_get_attachment_image_sizes( $settings['basic_info_map_image_id'] ) : '';
+            
+                              
         }
         ?>
             
@@ -23,7 +28,10 @@
         </div>
 
         <div class="service_map">
-			<iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q='<?php echo $location_full_map; ?>'&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+            <?php
+            echo '<a href="https://maps.google.com/maps?q=' . $location_full_map . '"><img loading="lazy" src="' . $settings['basic_info_map_image'] . '" srcset="' . $src_set. '" sizes="' . $sizes. '"  /></a>';            
+            ?>
+
 		</div>
             <?php } ?>
     </div>

@@ -58,7 +58,11 @@ add_action( 'init', 'custom_post_type_galleries', 0 );
 
 
 function create_gallery_roles () {
+	
+	remove_role( 'gallery_author' );
+
 	$cap = array(
+		'read'				=>	true,
 		'delete_galleries' => true,
 		'delete_published_galleries' => true,
 		'edit_galleries' => true,

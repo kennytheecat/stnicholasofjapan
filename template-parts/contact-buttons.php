@@ -15,7 +15,7 @@
             if ( is_numeric( $button['url'] ) ) {
                 $button['url'] = get_the_permalink($button['url'] );
             }
-            if ( $button['url_override'] ) {
+            if ( !empty($button['url_override'] ) ){
                 $button['url'] = $button['url_override'];
             }
 

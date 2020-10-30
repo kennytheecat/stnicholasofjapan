@@ -85,15 +85,6 @@ function contributor_redirect() {
 }
 add_action( 'admin_init', 'contributor_redirect' );
 
-function wps_change_role_name() {
-	global $wp_roles;
-	if ( ! isset( $wp_roles ) )
-	$wp_roles = new WP_Roles();
-	$wp_roles->roles['editor']['name'] = 'Content Editor';
-	$wp_roles->role_names['editor'] = 'Content Editor';
-}
-add_action('init', 'wps_change_role_name');
-
 /*************************************************************
 WORDPRESS ADMIN BAR
 ***********************************************************/
@@ -190,14 +181,11 @@ function create_ba_theme_roles() {
 
 	// All other roles are found in their CPT file
 
-	// Mod contributor role
-	$con = get_role( 'contributor' );
-	$con->remove_cap( 'delete_posts' );
-	$con->remove_cap( 'edit_posts' );
-	$con->add_cap( 'upload_files' );
+	// Add Post Author Role	
+	remove_role( 'post_author' );
 
-	// Add Post Author Role
 	$cap = array(
+		'read'			=>	true,
 		'delete_posts' => true,
 		'delete_published_posts' => true,
 		'edit_posts' => true,
@@ -210,9 +198,19 @@ function create_ba_theme_roles() {
 
 	// Remove Subscriber and Author
 	$wp_roles = new WP_Roles();
+	$wp_roles->remove_role("contributor");
 	$wp_roles->remove_role("subscriber");
 	$wp_roles->remove_role("author");
 
 }
 add_action('after_switch_theme', 'create_ba_theme_roles');
+
+function wps_change_role_name() {
+	global $wp_roles;
+	if ( ! isset( $wp_roles ) )
+	$wp_roles = new WP_Roles();
+	$wp_roles->roles['editor']['name'] = 'Content Editor';
+	$wp_roles->role_names['editor'] = 'Content Editor';
+}
+add_action('init', 'wps_change_role_name');
 ?>

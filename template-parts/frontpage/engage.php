@@ -1,6 +1,5 @@
 <section class="engage">
     <div class="wrapper">
-        <div class="seraph"></div>
 
     <?php
     $intro = get_option('frontpage', false);
@@ -19,13 +18,18 @@
     }  
     ?>
         
-    <div class="prayer">
+    <div class="module prayer">
         <h3><?php echo $intro['prayer_heading']; ?></h3>    
         <div class="content"><?php echo $intro['prayer_content']; ?></div>
         <button><a href="<?php echo $intro['prayer_button_url']; ?>"><?php echo $intro['prayer_button']; ?></a></button>
     </div>
 
-    <div class="ask">
+
+    <div class="image">
+        <img src="http://localhost/bathemes-sandbox/wp-content/themes/tabula-rasa_nicholas-of-japan/images/seraph.png" />
+    </div>
+
+    <div class="module ask">
         <h3><?php echo $intro['ask_heading']; ?></h3>    
         <div class="content"><?php echo $intro['ask_content']; ?></div>
         <button><a href="<?php echo $intro['ask_button_url']; ?>"><?php echo $intro['ask_button']; ?></a></button>

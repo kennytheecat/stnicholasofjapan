@@ -102,7 +102,11 @@ function custom_taxonomy_bulletin_types() {
 add_action( 'init', 'custom_taxonomy_bulletin_types', 0 );
 
 function create_bulletin_roles () {
+
+	remove_role( 'bulletin_author' );
+
 	$cap = array(
+		'read'				=>	true,
 		'delete_bulletins' => true,
 		'delete_published_bulletins' => true,
 		'edit_bulletins' => true,

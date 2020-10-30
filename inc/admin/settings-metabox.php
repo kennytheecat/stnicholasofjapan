@@ -1,4 +1,15 @@
 <?php
+function create_settings_access_cap() {
+
+    $roles = array( 'editor','administrator' );
+
+    foreach( $roles as $the_role ) {      
+        
+        $role = get_role($the_role);
+        $role->add_cap( 'settings_access' );		
+    }
+}
+add_action('after_switch_theme', 'create_settings_access_cap');
 /**
  * Hook in and register a metabox to handle a theme options page and adds a menu item.
  */
@@ -10,7 +21,8 @@ function register_settings_metabox() {
 		'id'           => 'settings',
 		'title'        => 'Settings',
 		'object_types' => array( 'options-page' ),
-		'option_key'   => 'settings',
+		'option_key'   => 'settings',        
+        'capability' => 'settings_access',
 	);
 	// 'tab_group' property is supported in > 2.4.0.
 	if ( version_compare( CMB2_VERSION, '2.4.0' ) ) {
@@ -89,6 +101,29 @@ function register_settings_metabox() {
         'type'       => 'select',
 		'show_option_none' => true,
         'options_cb' => 'cmb2_get_post_options',      
+    ) );
+
+    $cmb->add_field( array(
+        'name' => __( 'Generate Map', 'bothand' ),
+        'desc' => __( 'Before "Generating Map Image", save the page after inserting location details. Then Click "Generate Map Image". Save and Upload the image.', 'bothand' ),
+        'id'   => 'map_image',
+        'type' => 'title',
+    ) );   
+
+    $settings = get_option( 'settings', true);
+    $name = $settings['basic_info_name'];
+    $street = $settings['basic_info_address_street'];
+    $city = $settings['basic_info_address_city'];
+    $state = $settings['basic_info_address_state'];
+    $zip = $settings['basic_info_address_zip'];
+    $location_full = $name . ' ' . $street . ', ' . $city . ', ' . $state . '  ' . $zip;
+    $location_full_map = str_replace( ' ', '%20', $location_full );
+
+    $cmb->add_field( array(
+        'name' => __( 'Upload Map Image', 'bothand' ),
+        'desc' => __( '<a href="https://maps.googleapis.com/maps/api/staticmap?center=' . $location_full_map . '&zoom=17&scale=1&size=500x300&maptype=roadmap&key=AIzaSyBDk7Q9l3Czfcz7Tz7cBI4F2qqozEWDEug&format=png&visual_refresh=true&markers=size:mid%7Ccolor:0xff0000%7Clabel:%7C' . $location_full_map . '" target="_blank">Generate Map Image</a>', 'bothand' ),
+        'id'   => 'basic_info_map_image',
+        'type'       => 'file',   
     ) );
 
     $cmb->add_field( array(
@@ -308,6 +343,41 @@ function register_settings_metabox() {
         ) );    
 
     }
+
+    $cmb->add_field( array(
+        'name' => __( 'Alert', 'bothand' ),
+        'desc' => __( 'If you need to relay an important message, this will create a red bar at the top of yoour website with your message. If it a long message, you can create a link to the content.', 'bothand' ),
+        'id'   => 'alert',
+        'type' => 'title',
+    ) );   
+    
+    $cmb->add_field( array(
+        'name' => __( 'Alert Message', 'bothand' ),
+        'desc' => __( '', 'bothand' ),
+        'id'   => 'alert-message',
+        'type' => 'wysiwyg',
+    ) ); 
+
+    $cmb->add_field( array(
+        'name' => __( 'End Date', 'bothand' ),
+        'desc' => __( 'Date to stop displaying message.', 'bothand' ),
+        'id'   => 'alert-date',
+        'type' => 'text_date',
+    ) ); 
+
+    $cmb->add_field( array(
+        'name' => __( 'Google Analytics', 'bothand' ),
+        'desc' => __( 'If you haev a tracking id for Google Analytics, add it here. If you do not and would like to, let me know. Otherwsie you can leave this blank.', 'bothand' ),
+        'id'   => 'google',
+        'type' => 'title',
+    ) );   
+
+    $cmb->add_field( array(
+        'name' => __( 'Tracking ID', 'bothand' ),
+        'desc' => __( '', 'bothand' ),
+        'id'   => 'gid',
+        'type' => 'text',
+    ) );  
 	
 }
 add_action( 'cmb2_admin_init', 'register_settings_metabox' );

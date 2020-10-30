@@ -35,7 +35,7 @@
     }
 
     return this.each(function () {
-      var selectors = ["iframe[src*='player.vimeo.com']", "iframe[src*='youtube.com']", "iframe[src*='youtube-nocookie.com']", "iframe[src*='kickstarter.com'][src*='video.html']", "object", "embed"];
+      var selectors = ["iframe[src*='player.vimeo.com']", "iframe[src*='youtube.com']", "iframe[src*='youtube-nocookie.com']", "iframe[src*='kickstarter.com'][src*='video.html']", "iframe[data-src*='player.vimeo.com']", "iframe[data-src*='youtube.com']", "iframe[data-src*='youtube-nocookie.com']", "iframe[data-src*='kickstarter.com'][src*='video.html']", "object", "embed"];
 
       if (settings.customSelector) {
         selectors.push(settings.customSelector);
@@ -70,7 +70,9 @@
 
         var height = this.tagName.toLowerCase() === 'object' || $this.attr('height') && !isNaN(parseInt($this.attr('height'), 10)) ? parseInt($this.attr('height'), 10) : $this.height(),
             width = !isNaN(parseInt($this.attr('width'), 10)) ? parseInt($this.attr('width'), 10) : $this.width(),
-            aspectRatio = height / width;
+            aspectRatio = height / width; //mod to force the 16:9 ratio to keep layout consistant
+
+        aspectRatio = .5625;
 
         if (!$this.attr('id')) {
           var videoID = 'fitvid' + Math.floor(Math.random() * 999999);
@@ -88,7 +90,7 @@
 
 jQuery(document).ready(function ($) {
   if ($.fn.fitVids) {
-    $('.hentry').fitVids();
+    $('body').fitVids();
   }
 });
 "use strict";

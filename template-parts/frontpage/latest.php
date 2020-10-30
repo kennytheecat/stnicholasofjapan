@@ -18,6 +18,7 @@ foreach ( $media_array as $posttype ) {
 }
 // the array should now only consist of post types that have items in them
 $media_array = $media_array_checked;
+$media_array = check_media_array();
 
 // make an array of just values for get_posts
 $post_type_array = array( 'post' );
@@ -92,13 +93,19 @@ $items = array_slice( $items, 0, $ppp );
 
 // Check if there are at least 3 items
 $goahead = false;
-$count = $items;
-if ( $count >= 2 ) { $goahead = true; } else { $goahead = false; }
-//check if the newest item is less than 3 months old
-$then = strtotime('-3 months');
-$this_date = strtotime($items[0]->post_date);
+$count = count($items);
+if ( $count <= 2 ) { 
+    $goahead = false; 
+} else { 
 
-if ( $this_date >= $then ) { $goahead = true; } else { $goahead = false; }
+    $goahead = true; 
+    //check if the newest item is less than 3 months old
+    $then = strtotime('-3 months');
+    $this_date = strtotime($items[0]->post_date);
+
+    if ( $this_date >= $then ) { $goahead = true; } else { $goahead = false; }
+
+}
 
 if ( $goahead == true ) {
 ?>
@@ -135,7 +142,7 @@ if ( $goahead == true ) {
         $link = get_the_permalink();
         
         if ( has_post_thumbnail() ) {
-            $image = get_the_post_thumbnail(); 
+            $image = get_the_post_thumbnail($post->ID, 'medium', array( 'loading' => 'lazy')); 
         } else {
             $images = get_option( 'settings');
             $image = $images['default_image_' . $post->post_type . '_id'];            

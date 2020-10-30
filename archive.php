@@ -17,7 +17,7 @@ get_header();
 
 			<header class="page-header">
 				<?php
-				post_type_archive_title( '<h1 class="page-title">', '</h1>' );
+				post_type_archive_title( '<h1 class="entry-title">', '</h1>' );
 				//the_archive_description( '<div class="archive-description">', '</div>' );
 				?>
 			</header><!-- .page-header -->
@@ -26,7 +26,8 @@ get_header();
 			wp_nav_menu( array(
 				'menu'     => 'Main Nav',
 				'sub_menu' => true,
-				'container_class' => 'submenu'
+				'container_class' => 'submenu',
+				'menu_section'		=>	'media'
 				) );
 			?>
 			<div class="block">

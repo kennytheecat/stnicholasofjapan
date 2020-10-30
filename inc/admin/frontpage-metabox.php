@@ -23,9 +23,19 @@ function cmb2_get_post_options( $query_args ) {
     return $post_options;
 }
 
+function create_frontpage_access_cap() {
 
+    $roles = array( 'editor','administrator' );
 
-/**
+    foreach( $roles as $the_role ) {      
+        
+        $role = get_role($the_role);
+        $role->add_cap( 'frontpage_access' );		
+    }
+}
+add_action('after_switch_theme', 'create_frontpage_access_cap');
+
+/*
  * Hook in and register a metabox to handle a theme options page and adds a menu item.
  */
 function register_frontpage_metabox() {
@@ -36,7 +46,8 @@ function register_frontpage_metabox() {
 		'id'           => 'frontpage',
 		'title'        => 'Front Page',
 		'object_types' => array( 'options-page' ),
-        'option_key'   => 'frontpage',
+        'option_key'   => 'frontpage',        
+        'capability' => 'frontpage_access',
 	);
 	// 'tab_group' property is supported in > 2.4.0.
 	if ( version_compare( CMB2_VERSION, '2.4.0' ) ) {

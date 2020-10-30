@@ -102,7 +102,11 @@ function custom_taxonomy_link_types() {
 add_action( 'init', 'custom_taxonomy_link_types', 0 );
 
 function create_link_roles () {
+
+	remove_role( 'link_author' );
+
 	$cap = array(
+		'read'				=>	true,
 		'delete_links' => true,
 		'delete_published_links' => true,
 		'edit_links' => true,

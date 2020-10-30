@@ -15,10 +15,10 @@
     echo '<a href="' . esc_url( get_permalink() ) . '">';
 
     if  ( has_post_thumbnail() ) {
-        the_post_thumbnail('archive');
+        the_post_thumbnail('thumbnail');
     } else {
         $image_id = get_image_id('Article Default Image');
-        echo wp_get_attachment_image($image_id, 'archive', false );
+        echo wp_get_attachment_image($image_id, 'thumbnail', false );
     }
     
     echo '</a>';

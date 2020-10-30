@@ -1,5 +1,5 @@
 <?php
-/* Template Name: Articles */ 
+/* Template Name: Articles Template*/ 
 /**
  * The template for displaying archive pages
  *
@@ -39,7 +39,8 @@ $the_query = new WP_Query( $args );
 			wp_nav_menu( array(
 				'menu'     => 'Main Nav',
 				'sub_menu' => true,
-				'container_class' => 'submenu'
+				'container_class' => 'submenu',
+				'menu_section'		=>	'media'
 				) );
 			?>
 			<div class="block">
@@ -64,13 +65,15 @@ $the_query = new WP_Query( $args );
 
 			the_posts_navigation();
 
+			echo '</div> <!-- .entry-content -->';
+
 		else :
 
 			get_template_part( 'template-parts/content', 'none' );
 
 		endif;
 		?>
-			</div> <!-- .entry-content --> 
+			
 		</main><!-- #main -->
 	</div><!-- #primary -->
 

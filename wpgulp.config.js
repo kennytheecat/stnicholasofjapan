@@ -10,7 +10,7 @@
 module.exports = {
 
 	// Project options.
-	projectURL: 'localhost/bathemes', // Local project URL of your already running WordPress site. Could be something like wpgulp.local or localhost:3000 depending upon your local WordPress setup.
+	projectURL: 'localhost/bathemes-sandbox', // Local project URL of your already running WordPress site. Could be something like wpgulp.local or localhost:3000 depending upon your local WordPress setup.
 	productURL: './', // Theme/Plugin URL. Leave it like it is, since our gulpfile.js lives in the root folder.
 	browserAutoOpen: false,
 	injectChanges: true,
@@ -23,13 +23,13 @@ module.exports = {
 	precision: 10,
 
 	// JS Vendor options.
-	jsVendorSRC: './js/vendor/*.js', // Path to JS vendor folder.
-	jsVendorDestination: './_dev/js/', // Path to place the compiled JS vendors file.
+	jsVendorSRC: './_dev/js/vendor/*.js', // Path to JS vendor folder.
+	jsVendorDestination: './js/', // Path to place the compiled JS vendors file.
 	jsVendorFile: 'vendor', // Compiled JS vendors file name. Default set to vendors i.e. vendors.js.
 
 	// JS Custom options.
-	jsCustomSRC: './js/custom/*.js', // Path to JS custom scripts folder.
-	jsCustomDestination: './_dev/js/', // Path to place the compiled JS custom scripts file.
+	jsCustomSRC: './_dev/js/custom/*.js', // Path to JS custom scripts folder.
+	jsCustomDestination: './js/', // Path to place the compiled JS custom scripts file.
 	jsCustomFile: 'custom', // Compiled JS custom file name. Default set to custom i.e. custom.js.
 
 	// Images options.
