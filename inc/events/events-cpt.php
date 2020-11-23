@@ -123,15 +123,6 @@ function create_event_roles () {
 
 	add_role( 'event_author', 'Event Author', $cap );
 
-	/*
-	$role = get_role('event_author');
-				
-	$role->add_cap( 'manage_locations' );
-	$role->add_cap( 'edit_locations' );
-	$role->add_cap( 'delete_locations' );
-	$role->add_cap( 'assign_locations' );
-	*/
-
 	// add the custom capabilities to the desired user roles 
 $roles = array( 'editor','administrator' );
 
@@ -161,29 +152,16 @@ add_action('after_switch_theme', 'create_event_roles');
 
 $location_meta = array( 'address', 'city', 'state');
 
+// May need this on install
+/*
 function location_register_meta() {
 	foreach ( $location_meta as $meta ) {
 		register_meta( 'locations', $meta );
 	}
 }
+*/
 //add_action( 'init', 'location_register_meta' );
 
-//function jt_sanitize_hex( $address ) {
-
-    //$address = ltrim( $address, '#' );
-
-	//return preg_match( '/([A-Fa-f0-9]{3}){1,2}$/', $address ) ? $address : '';
-	
-	//return $address;
-//}
-/*
-function jt_get_term_address( $term_id, $hash = false ) {
-
-    $address = get_term_meta( $term_id, 'address', true );
-
-    return $hash && $address ? $address : $address;
-}
-*/
 
 add_action( 'locations_add_form_fields', 'location_address_field' );
 
@@ -248,41 +226,4 @@ function save_location_meta( $term_id ) {
 			update_term_meta( $term_id, $meta, $new_value );
 	}
 }
-
-
-add_filter( 'manage_edit-locations_columns', 'locations_edit_term_columns' );
-
-function locations_edit_term_columns( $columns ) {
-
-    $columns['address'] = __( 'Address', 'jt' );
-
-    return $columns;
-}
-
-add_filter( 'manage_locations_custom_column', 'locations_term_custom_column', 10, 3 );
-
-function locations_term_custom_column( $out, $column, $term_id ) {
-
-    if ( 'address' === $column ) {
-
-		global $location_meta;  
-		foreach ( $location_meta as $meta ) { 
-
-			$value =  get_term_meta( $term_id, $meta, true );
-
-			if ( ! $value )
-				$value = '';
-
-			$address_line[$meta] = $value;	
-		}
-
-		$address_final = $address_line['address'] . ', ' . $address_line['city'] . ', ' . $address_line['state'];
-
-		$out = sprintf( '<span class="address-block">%s</span>', esc_attr( $address_final ) );
-		
-	}
-	
-    return $out;
-}
-
 ?>

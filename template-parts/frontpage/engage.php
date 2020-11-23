@@ -26,7 +26,7 @@
 
 
     <div class="image">
-        <img src="http://localhost/bathemes-sandbox/wp-content/themes/tabula-rasa_nicholas-of-japan/images/seraph.png" />
+        <img src="http://localhost/bathemes-sandbox/wp-content/themes/tabula-rasa_nicholas-of-japan/images/seraph.png" loading="lazy" />
     </div>
 
     <div class="module ask">

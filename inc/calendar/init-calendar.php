@@ -18,7 +18,7 @@ function register_calendar_metabox() {
 
     $cmb->add_field( array(
         'name' => esc_html__( 'Instructions:', 'cmb2' ),
-        'desc' => 'The calendar displayed is based on the admin email provided. If you want to change the calnder to be dispalyed on a differnet email, enter it the email field. <br /> If you need to display a specific view of the calendar, <a href="https://support.google.com/calendar/answer/41207" target="_blank">follow these instructions</a>, and enter it in the code section below.',
+        'desc' => 'The calendar displayed is based on the admin email provided. If you want to change the calender to be displayed on a differnet email, enter it the email field. <br /> If you need to display a specific view of the calendar, <a href="https://support.google.com/calendar/answer/41207" target="_blank">follow these instructions</a>, and enter it in the code section below.',
         'id'   => '_intro',
         'type' => 'title',
     ) );

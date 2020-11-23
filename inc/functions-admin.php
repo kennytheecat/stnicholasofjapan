@@ -5,10 +5,8 @@ include('calendar/init-calendar.php');
 include('events/init-events.php');
 include('galleries/init-galleries.php');
 include('sermons/init-sermons.php');
-//include('pages/init-pages.php');
 include('admin/init-frontpage.php');
 include('admin/load-theme.php');
-include('infohub/init-info.php');
 
 /*************************************************************
 ADMIN MENU

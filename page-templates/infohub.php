@@ -26,8 +26,6 @@ $meta = get_post_meta( $post->ID, 'info', true);
 				?>
 			</header><!-- .page-header -->
 
-        <!-- <section class="spotlights">
-            <div class="spotlights-wrapper">  -->
                 <?php
                 			wp_nav_menu( array( 
                                 'theme_location' => 'infohub', 
@@ -37,17 +35,8 @@ $meta = get_post_meta( $post->ID, 'info', true);
                                 'after' => '</p></div>' 
                                 ) 
                             ) ; 
-               /*
-                foreach ( $meta as $item ) {
-                    $new_url = get_the_permalink($item['url'] );
-                    echo '<div class="button"><h4><a href="' . $new_url. '">' . $item['title'] . '</a></h4></div>';
-                }
-                */
+
                 ?>
-            <!--
-                </div>
-        </section>
-            -->
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

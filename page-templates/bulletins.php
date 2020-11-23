@@ -13,48 +13,6 @@
  */
 
 get_header();
-/*
-global $wpdb;
-$results = $wpdb->get_results( "SELECT * FROM bulletins ORDER BY date DESC", ARRAY_A );
-
-foreach ($results as $result ) {
-    $dates = explode( '-', $result['date']);
-    $list[$dates[0]][$dates[1]][] = $result;
-}
-*/
-/*
-$terms = get_terms( array(
-    'hide_empty' => 0,
-    'taxonomy' => 'bulletin_types',
-) );
-foreach ( $terms as $term ) {
-    
-    $args = array( 
-        'posts_per_page'    => -1, 
-        'post_status'       => array( 'publish', 'future' ),
-        'post_type'         => 'bulletins',
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'bulletin_types',
-                'field' => 'id',
-                'terms' => $term->term_id,
-            ),
-        ), 
-        'orderby'       => 'date',
-        'order'         => 'DESC',
-    );
-    $bulletins = get_posts( $args );
-
-    if ( $bulletins ) {
-
-        foreach ( $bulletins as $bulletin ) {
-            $dates = explode( ' ', $bulletin->post_date ); 
-            $dates = explode( '-', $dates[0] );
-            $list[$dates[0]][$dates[1]][] = $bulletin;
-        }
-    }
-}
-*/
 ?>
 
 	<div id="primary" class="content-area">
@@ -70,13 +28,13 @@ foreach ( $terms as $term ) {
 				'container_class' => 'submenu',
 				'menu_section'		=>	'media'
 				) );
-			?>        
-		<?php
-    $terms = get_terms( array(
-        'hide_empty' => 0,
-        'taxonomy' => 'bulletin_types',
-    ) );
-    //foreach ( $terms as $term ) {
+
+
+        $terms = get_terms( array(
+            'hide_empty' => 0,
+            'taxonomy' => 'bulletin_types',
+        ) );
+    
         
         $args = array( 
             'posts_per_page'    => -1, 
@@ -116,8 +74,6 @@ foreach ( $terms as $term ) {
             krsort($item);
 
             foreach ( $item as $month => $type ) {
-                //echo '<hr />';
-               // echo $month;
                 echo '<ul class="month">';
                 echo '<span class="title">';
                 echo date("F", mktime(0, 0, 0, $month, 10));
@@ -125,7 +81,6 @@ foreach ( $terms as $term ) {
 
                 krsort($type);
 
-               //echo '<pre>'; print_r($type); echo '</pre>';
 
                 foreach ( $type as $key => $item ) {
                     if ( $item[0] ) {
@@ -149,7 +104,7 @@ foreach ( $terms as $term ) {
             echo '</section>';            
         }
 
-    //}        
+      
 		?>
 
 		</main><!-- #main -->

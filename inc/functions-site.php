@@ -138,4 +138,51 @@ add_filter( 'oembed_result', function ( $html, $url, $args ) {
 
   return $html; 
 }, 10, 3 );
+
+// Mod media menu
+function your_custom_menu_item ( $items, $args ) {
+
+	$media_array = check_media_array();
+
+    if (  $args->menu_section == 'media') {
+
+		foreach ( $media_array as $posttype ) {
+
+            if ( $posttype == 'post') {
+                $posttype = 'articles';
+            }
+            $link = str_replace( ' ', '-', $posttype);
+            $title = ucwords($posttype);
+            if ( $posttype == 'bulletins') {
+                $link = 'bulletins-newsletters';
+                $title = 'Bulletins/Newsletters';
+			}    
+						
+			$items .= '<li><a href="' . home_url() . '/' . $link . '">' . $title . '</a></li>';
+		}
+    }
+    return $items;
+}
+add_filter( 'wp_nav_menu_items', 'your_custom_menu_item', 10, 2 );
+
+// Check which media categories acctually have items
+function check_media_array() {
+	$media_array = array( 'post', 'events', 'galleries', 'sermons', 'bulletins', 'links' );
+	$media_array_checked = array();
+
+	foreach ( $media_array as $posttype ) {
+		$args = array(
+			'post_type' => $posttype,
+		);
+		
+		$hasposts = get_posts( $args );
+
+		if ( $hasposts ) {
+			$media_array_checked[] = $posttype;
+		}
+		
+	}
+	
+	return $media_array_checked;
+}
 ?>
